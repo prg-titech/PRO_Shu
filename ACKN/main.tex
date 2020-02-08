@@ -48,9 +48,18 @@ Code recommendation provides code fragments that the programmer likely to type i
 \maketitle
 
 \section{Introduction}
-Selecting a proper programming environment is essential for a programmer when they start to build a project. A Java programmer is likely to choose Eclipse or IntelliJ, while a C programmer prefers Visual Studio. A principle to judge which environment is appropriate is the efficiency in developing code.
+% Not needed for PRO
+% Selecting a proper programming environment is essential for a programmer when they start to build a project. A Java programmer is likely to choose Eclipse or IntelliJ, while a C programmer prefers Visual Studio. A principle to judge which environment is appropriate is the efficiency in developing code.
 
-Code recommendation is one of the advanced techniques that assist a programmer to save time by providing a list of possible code fragments. The recommendations would show on the editing monitor after a user type some inputs. Then, the user can view the list and select the desired code fragment instead of writing down the whole code.  
+\emph{Code recommendation}, also called code completion, is one of the common features in modern programming editors that presents a list of code fragments to the programmer so that he or she can input the desired code by merely choosing one of them.
+% present one typical example so that the readers can understand what
+% we are talking about
+While a typical implementation presents the names of available methods/functions/variables that match the letters already typed in the editor, 
+% and since we are not working on such a simple code completion
+% feature, make a remark that there are many variations
+there are many variations with respect to the lengths of the presented code fragments (from function names to a few lines of code), and with respect to the information used for making recommendations.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO
 
 The information that a code recommendation takes into consideration can be divided into two kinds: explicit and implicit. 
 
