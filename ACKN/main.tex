@@ -1,8 +1,37 @@
 \documentclass[PRO,english]{ipsj}
 \usepackage{PROpresentation}
-\PROheadtitle{y-n-(x): Manuscript for presentation at IPSJ-SIGPRO, d m Y.}
+\PROheadtitle{2020-128-(x): Manuscript for presentation at IPSJ-SIGPRO, 12 3 2020.}
 \usepackage{graphicx}
 \usepackage{latexsym}
+
+\usepackage{listings}
+\usepackage{xcolor}
+ 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
 
 
 
@@ -57,8 +86,8 @@ Our goal is to build a code recommendation system that:
 \begin{enumerate}
 \item Suitable to all programmers including a beginner and an expert.
 \item Recommend the expression that satisfies the user’s purpose, especially when the expression is complex.
-
 \end{enumerate}
+
 We implement a plug-in on Eclipse named ACKN based on a context-aware keyword programming technique. 
 
 \section{Background}
@@ -80,33 +109,145 @@ Keyword programming extracts essential information before generation. The inform
 \item the name, return type, object class, and argument types of a method.
 \end{itemize}
 
-For example, supposed the system wants to generate the expression “System.out.println(result)”. First, it is necessary to know the information of a class name “System”. And a field “out” that is in the object class “System” and return the type “PrintStream”. Also, a method named “println” where the receiver type is “PrintStream”, the return type is “void” and the argument type is “String”. Finally, a local variable “result” that returns the type “String”.
+For example, supposed the system wants to generate the expression \texttt{System.out.println(result)}. First, it is necessary to know the information of a class name \texttt{System}. And a field \texttt{out} that is in the object class \textit{System} and return the type \textit{PrintStream}. Also, a method named \texttt{println} where the receiver type is \textit{PrintStream}, the return type is \textit{void} and the argument type is \textit{String}. Finally, a local variable \texttt{result} that returns the type \textit{String}.
 
 \subsubsection{Generation}
 After obtaining those elements from a source file, the system generates all possible expressions that obey the syntax and type rules of the programming language. For instance, considering the program
-The cursor is in line 18. In this line, we can call the method and field in the class ‘BufferedReader’, ‘IOException’, ‘ArrayList’ and ‘List’. Moreover, we also can refer the variable ‘src’ and ‘array’. Therefore, a method invocation such as ‘array.add(src.readLine())’ is available, where ‘add’ is one of the methods declared in the class ‘List’, and ‘readLine’ is a method declared in the class ‘BufferedReader’. 
 
-However, a method invocation such as ‘System.out.print(result)’ leads to a compile error, because it is not able to refer the variable ‘result’ in line 18. Another method invocation such as ‘result.print()’ is also forbidden since it does not follow the type rules.
+\begin{lstlisting}[language=Java]
+package example;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Example{
+	public static void main(String[] args){
+	    String result = ``result'';
+	}
+
+	public List getLines(BufferedReader src) throws IOException{
+	    List array = new ArrayList();
+	    while(src.ready()){
+	        |
+	    }
+
+	    return null;
+	}
+}
+\end{lstlisting}
+
+The cursor is in line 16. In this line, we can call the method and field in the class \textit{BufferedReader}, \textit{IOException}, \textit{ArrayList} and \textit{List}. Moreover, we also can refer the variable \texttt{src} and \texttt{array}. Therefore, a method invocation such as \texttt{array.add(src.readLine())} is available, where \texttt{add} is one of the methods declared in the class \textit{List}, and \texttt{readLine} is a method declared in the class \textit{BufferedReader}. 
+
+However, an expression like \texttt{System.out.print(result)} would lead to a compile error, because it is not able to refer the variable \texttt{result} in the line 10. Another method invocation such as \texttt{result.print()} is also forbidden since it does not follow the type rules.
 
 
 \subsubsection{Ranking}
-The code completion system of Eclipse organizes the recommendation alphabetically. For example, the method ‘add’ shows in front of the method ‘concat’ on the recommendation list.
+\label{subsubsection:Ranking}
+The code completion system of Eclipse organizes the recommendation alphabetically. For example, the method \texttt{add} shows in front of the method \texttt{concat} on the recommendation list.
 
-Likewise, a keyword programming system shows the recommendations in the order of scores calculated by rules that:
--0.05 for each height of abstract syntax tree,
-+1.0 if the expression contains a token inside the keyword query,
--0.01 if the token is not in the keyword query, and
-+0.001, when the element is a local variable or a member method.
+In contrast, a keyword programming system shows the recommendations in the order of scores calculated by rules that:
+\begin{itemize}
+\item -0.05 for each height of abstract syntax tree,
+\item +1.0 if the expression contains a token inside the keyword query,
+\item -0.01 if the token is not in the keyword query, and
+\item +0.001, when the element is a local variable or a member method.
+\end{itemize}
 
-We demonstrate the rule by an example of calculating the score for a function “array.add()” given the keyword “add” and “line”.
+Token is obtained by splitting an expression with punctuation and upper case letter. For example, the expression \texttt{str.toUpperCase()} has 4 tokens, which are \texttt{str}, \texttt{to}, \texttt{upper} and \texttt{case}.
 
-First, since the depth of ”array.add()” is two, the initial score is -0.1.
+We demonstrate the rule by an example of calculating the score for a function \texttt{array.add()} given the keyword \textbf{add} and \textbf{line}.
 
-Then, since the token “array” is not in the keyword query, the score becomes -0.11.
+First, since the height of \texttt{array.add()} is two, the initial score is -0.1.
 
-Because the token “add” belongs to the keyword query, the score becomes +0.89.
+Then, since the token \texttt{array} is not in the keyword query, the score becomes -0.11.
+
+Because the token \texttt{add} is in the keyword query, the score becomes +0.89.
 
 Finally, since the token array is also a local variable, the final score is +0.891.
+
+\subsection{Neural text generation}
+Word2Vec
+Mechnism
+
+\section{Problem}
+Although keyword programming can help a user to complete the program conveniently, there is still a problem that the expected expression, especially a complicated one, is not able to be shown as the first candidate.
+
+For example, if a user wants to read the standard input information from console, in Java, most of users would write the expression \texttt{new BufferedReader(new InputStreamReader(System.in))}. 
+
+When the programmer uses keyword programming to get this expression, after the user types the keywords \textbf{reader in} and triggers the system, the first candidate would be \texttt{new InputStreamReader(System.in)}, and the 12th candidate is the expected expression \texttt{new BufferedReader(new InputStreamReader(System.in))}. 
+
+
+% Likewise, if the user wants to display a message on the console, the expression could be \texttt{System.out.println(message)}. Given a keyword query \textbf{println message}, the first candidate is \texttt{System.err.println(message)} and the second one is \texttt{System.out.println(message)}.
+
+In the previous research, an expression is 90\% to be shown on the top of the recommendation list if the keywords use as same tokens as in the expression. For example, given a keyword query \textbf{new buffered reader new input stream reader system in}, the expression \texttt{new BufferedReader(new InputStreamReader(System.in))} would be the first candidate.
+
+However, like other code recommendation technique, keyword programming aims to shorten programming time. Thus, it would be meaningless if the user types all tokens in the expected expression. Alternatively, a keyword programming user would be more likely to choose relatively fewer substrings in the expected expression as the keyword query such as \textbf{reader in}. 
+
+By using the scoring function in the section~\ref{subsubsection:Ranking}, the score of the expression \texttt{new InputStreamReader(System.in)} would be +1.81. On the other hand, the score of the expression \texttt{new BufferedReader(new InputStreamReader}\\\texttt{(System.in))} would be +1.74. Therefore, the former expression is in a higher position in the recommendation list.
+
+The reason is that an expression has a higher score calculated by the scoring function when it is shorter and contains more keywords. Therefore, when the expected expression becomes more complicated and the number of keywords is relatively fewer, it is hard to be shown in a higher position in the recommendation list. In this paper, complicate denotes that the expression has a larger abstract syntax tree or contains many tokens. For instance, the height of \texttt{new BufferedReader(new InputStreamReader(System.in))} is 4, and it contains 9 tokens from \texttt{new} to \texttt{in}.
+
+\section{Proposal: Using a NN text generator}
+Our proposal is to use a neural network text generator to recommend more context-dependent expressions.
+
+The approach is straightforward. For each expression, we calculate not only a score by the orginal scoring function but also the occurance probability. We add these two values to represent the final score of the expression.
+
+For example, if the user is editing a program where the cursor is in line 6, and the keyword query is \texttt{read in}:
+\begin{lstlisting}[language=Java]
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class ReadInput{
+	public static void main(String[] args){
+	    reader in|
+	}
+}
+\end{lstlisting}
+
+By using the original scoring function, the score of the expression is +1.74. 
+
+Subsequently, to calculate the occurance probability of the expression \texttt{new BufferedReader(new InputStreamReader(System.in))}, we need 7 steps. 
+
+First, we take the token sequence from \texttt{import} to \texttt{args} as an argument and predict the probability of the token \texttt{new} by the neural network model. 
+
+Then, append the token \texttt{new} to the token sequence and predict the probability of the token \texttt{BufferReader}. Repeat this procedure until get the probability of the last token \texttt{in}. 
+
+At this moment, we have 6 probability numbers for each tokens.  Finally, we add these 6 probabilities and use it to represent the occurance probability of the expression.
+
+Thus, in the new scoring function, the final score for the expression \texttt{new BufferedReader(new InputStreamReader(System.in))} is +(1.74 + \textit{probability}).
+
+By exploiting the implicit information from the previous codes and considering the context, an expression would have a higher probability value if it is more likely to be the next expression. 
+
+These implicit information includes the imported package declaration, the identifier names and the order of previous method invocations. For example, in the preceding program, the program has imported two package \textit{java.io.BufferedReader} and \textit{java.io.InputStreamReader}. Moreover, the class name is \textit{ReadInput}. The user is more likely to write the expression \texttt{new BufferedReader(new InputStreamReader(System.in))} than \texttt{new InputStreamReader(System.in)}. Therefore, the probability of the former expression is higher than the latter one. In other words, the candidate expression \texttt{new BufferedReader(new InputStreamReader(System.in))} could be shown in a higher position.
+
+
+\section{Implementation}
+
+Beam Search
+
+Word2Vec
+
+LSTM
+
+\section{Evaluation}
+\subsection{Procedure}
+
+\subsection{Result}
+
+\subsection{Discussion}
+
+\section{Future Work}
+Word2Vec
+Speed: NN
+
+\section{Related Work}
+
+\section{Conclusion}
+
+
+
 
 \begin{thebibliography}{10}
 \bibitem{ProgramHistory} Robbes R, Lanza M. How program history can improve code completion[C]//2008 23rd IEEE/ACM International Conference on Automated Software Engineering. IEEE, 2008: 317-326.

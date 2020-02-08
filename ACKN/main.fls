@@ -1,4 +1,4 @@
-PWD /Users/aochishu/PRO/ipsj_v4/ACKN
+PWD /Users/aochishu/PRO/PRO_Shu/ACKN
 INPUT /usr/local/texlive/2019/texmf.cnf
 INPUT /usr/local/texlive/2019/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2019/texmf.cnf
@@ -34,6 +34,16 @@ INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/base/latexsym.sty
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/base/latexsym.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/listings/listings.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/listings/listings.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstmisc.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstmisc.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/listings/listings.cfg
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/listings/listings.cfg
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/xcolor/xcolor.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/xcolor/xcolor.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/color.cfg
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/color.cfg
 INPUT main.aux
 INPUT main.aux
 OUTPUT main.aux
@@ -133,6 +143,9 @@ INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/goth10.tf
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmssbx10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
 OUTPUT main.dvi
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmtt8.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
