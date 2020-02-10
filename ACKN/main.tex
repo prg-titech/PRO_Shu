@@ -57,21 +57,32 @@ Code recommendation provides code fragments that the programmer likely to type i
 While a typical implementation presents the names of available methods/functions/variables that match the letters already typed in the editor, 
 % and since we are not working on such a simple code completion
 % feature, make a remark that there are many variations
-there are many variations with respect to the lengths of the presented code fragments (from function names to a few lines of code), and with respect to the information used for making recommendations.
+there are many variations with respect to the lengths of the presented code fragments (from function names to a few lines of code), and with respect to information used for making recommendations.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO
+Information used for making recommendations can roughly be classified into two kinds, namely \emph{explicit} intention and \emph{implicit} context.  
 
-The information that a code recommendation takes into consideration can be divided into two kinds: explicit and implicit. 
+Explicit intention is the information that the programmer provides to the system when he or she wants to obtain recommendation.  Examples are \emph{prefix letters}, \emph{an abbreviation}, and \emph{keywords}.  When the programmer wants to type \texttt{InputStreamReader}, he or she can type ``\texttt{Inp}'' or ``\texttt{ISR}'' to a prefix-based or abbreviation-based system, respectively, then the system will generate identifiers that start with \texttt{Inp} or that are concatenation of words starting from \texttt{I}, \texttt{S} and \texttt{R}.  These kind of recommendation systems can be found many programming editors, for example Eclipse IDE.
 
-Explicit information stands for straightforward information that comes from inputs of a code recommendation system. And for such kinds of systems, there are three categories of input: an abbreviation, a partial expression and a bunch of keywords.
+\emph{Keyword programming}, on which we are based on,  uses keywords\footnote{In keyword programmings, the term \emph{keyword} means a query word used for searching, like the one used for web search engines.  It should not be confused with keywords (or reserved words) in the syntax of programming languages.} as the explicit intention~\cite{KeywordProgramming}.  The key idea is, by letting the programmer provide a bit longer explicit intention, to enable the system can recommend longer expressions or statements.  For example, when the programmer wants to input
+\begin{quote}
+  \texttt{new BufferedReader(\\
+    \qquad{}new InputStreamReader(System.in))},   
+\end{quote}
+he or she can type ``\texttt{buffered reader in}'' so that the system will recommend expressions including the above one.  (In the next section, we explain how keyword programming generates recommendations.)
 
-Traditional code recommendation systems like the default one on Eclipse provide all possible code fragments after the user inputs a prefix of an identifier. The recommendations are normally sorted alphabetically, the user could browse the recommendation list and select the required code fragment.  
+Implicit context is the information available in the code and the past behaviors of the programmer.  For example, the recommendation system in Eclipse uses the type information of the expressions around the cursor position, and recommends identifiers (class, variable or method  names) that can form an expression with a matching type.
 
-For example, suppose a user wants to write a code that can read standard input from the console. In Java, the expression would be \texttt{new BufferedReader(new InputStreamReader(System.in))}. Instead of typing all strokes, the user can only type the prefix \textit{new Bu} to get the identifier \texttt{BufferedReader}, \textit{new InputS} for \texttt{InputStreamReader}, \textit{Sy} for \texttt{System} and \textit{i} for the last one \texttt{in}. 
+Implicit context can improve the quality of recommendations.  For example, Robbes et al.\  discovered that the type information and code structure are useful to greatly improve a prefix-based recommendation system~\cite{ProgramHistory}.
+% Romain Robbes et al.~\cite{ProgramHistory} propose a code recommendation system that also inputs a few characters, but the recommendations are sorted according to the user’s programming history.
 
-Romain Robbes et al.~\cite{ProgramHistory} propose a code recommendation system that also inputs a few characters, but the recommendations are sorted according to the user’s programming history.
 
-Moreover, Sangmok Han et al.~\cite{Sangmok} and Sheng Hu et al.~\cite{Sheng} recommend possible code fragments given an abbreviated input. The former uses a Hidden Markov Model to expand the abbreviation to inputs, while the latter uses a Gaussian mixture model. 
+%%%%%%%%%%%%%%%% TODO
+
+Han et al.\ proposed a method to improve an abbreviation-based recommendation system by using a hidden Markov model (HMM)~\cite{Sangmok}.  They construct a HMM of a program corpus, and use it for recommending expressions that are more likely to appear in the corpus.
+
+% I DON'T KNOW how Hu et al.'s work can be positioned yet.  %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Moreover, Sangmok Han et al.~\cite{Sangmok} and Sheng Hu et al.~\cite{Sheng} recommend possible code fragments given an abbreviated input. The former uses a Hidden Markov Model to expand the abbreviation to inputs, while the latter uses a Gaussian mixture model. 
 
 In addition, Greg little et al.~\cite{KeywordProgramming} propose an approach that the user types some keywords to search for an expected expression. And after the keyword programming system provides a list of candidate expressions, the user can look through the list and select the expected one. 
 
