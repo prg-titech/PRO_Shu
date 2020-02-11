@@ -76,9 +76,6 @@ Implicit context is the information available in the code and the past behaviors
 Implicit context can improve the quality of recommendations.  For example, Robbes et al.\  discovered that the type information and code structure are useful to greatly improve a prefix-based recommendation system~\cite{ProgramHistory}.
 % Romain Robbes et al.~\cite{ProgramHistory} propose a code recommendation system that also inputs a few characters, but the recommendations are sorted according to the user’s programming history.
 
-
-%%%%%%%%%%%%%%%% TODO
-
 Han et al.\ proposed a method to improve an abbreviation-based recommendation system by using a hidden Markov model (HMM)~\cite{Sangmok}.  They construct a HMM of a program corpus, and use it for recommending expressions that are more likely to appear in the corpus.
 
 % I DON'T KNOW how Hu et al.'s work can be positioned yet.  %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -92,8 +89,6 @@ Han et al.\ proposed a method to improve an abbreviation-based recommendation sy
 
 Many recommendation systems use implicit context information in combination with knowledge from a corpus.  In other words, those systems recommend expressions/identifiers that ``programmers who wrote these also wrote.'' 
 For example, TabNine~\cite{TabNine} and Bruch et al.'s work~\cite{Marcel} extract a sequence of tokens or a sequence of method calls before the cursor position in the editor, and recommend expressions or identifiers that frequently appear in the expressions that share the same sequence in the corpus.  %  takes the whole context into consideration arranges the recommendations by their probabilities. The previous system calculates probabilities by a GPT-2 model and Marcel Bruch et al. utilize an algorithm named Best Matching Neighbors(BMN) based on the K-Nearest Neighbors algorithm. 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO from here
 
 % https://tabnine.com/blog/deep/
 
@@ -116,8 +111,9 @@ For example, TabNine~\cite{TabNine} and Bruch et al.'s work~\cite{Marcel} extrac
 %   year={2019}
 % }
 
+Those system exploit corpora by using statistical methods in order to cope with large corpora.  Bruch et al.\ use a clustering method, for example.  TabNine uses a deep learning method~\cite{deep-tabnine2019} called GPT-2~\cite{radford2019language}.  Our work also uses a deep learning method for augmenting the keyword programming with the corpus knowledge.  We will explain a fundamental mechanism of using a deep learning method for exploitting a corpus in the next section.
 
-Using 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO: from here
 
 On the other hand, neural networks have developed rapidly in the past 20 years and have shown their strong power in many genres. One of them is the text generation, which aims to generate a likely sentence. Those neural networks text generators are divided by using different neural networks.~\cite{NNTG}
 
@@ -309,7 +305,7 @@ In the previous research, they used dynamic programming and A* algorithm. In ACK
 Beam search is a heuristic graph search algorithm. It is based on breadth first search with width constraint. To be more specific, in each depth, it first sorts the candidates by a scoring function. Then, instead of all branches, beam search cut the branches with lower score and continue to search on the remaining branches. \textit{bw} stands for the number of remaining branches for each depth.
 
 % TODO + (Figure)
-For example, suppose we want to select expressions with beam search from generations shown in Figure x. Given the keyword query is \textbf{read}, the system can calculate the score for each generation. With beam search, if the \textit{bw} is 3, then the beam search algorithm is same as breadth first search. If the \textit{bw} is 2, then the second branch of depth 2 and the third branch of depth 3 would be eliminated. In other words, the expression \texttt{} and \textt{} would remain as the result.
+For example, suppose we want to select expressions with beam search from generations shown in Figure x. Given the keyword query is \textbf{read}, the system can calculate the score for each generation. With beam search, if the \textit{bw} is 3, then the beam search algorithm is same as breadth first search. If the \textit{bw} is 2, then the second branch of depth 2 and the third branch of depth 3 would be eliminated. In other words, the expression \texttt{} and \texttt{} would remain as the result.
 
 \subsection{Preprocessing the training data}
 \label{subsection:Preprocessing}
