@@ -170,18 +170,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Example{
-	public static void main(String[] args){
-	    String result = ``result'';
-	}
+    public static void main(String[] args){
+        String result = ``result'';
+    }
 
-	public List getLines(BufferedReader src) throws IOException{
-	    List array = new ArrayList();
-	    while(src.ready()){
-	        |
-	    }
+    public List getLines(BufferedReader src) throws IOException{
+        List array = new ArrayList();
+        while(src.ready()){
+            |
+        }
 
-	    return null;
-	}
+        return null;
+    }
 }
 \end{lstlisting}
 
@@ -214,9 +214,19 @@ Because the token \texttt{add} is in the keyword query, the score becomes +0.89.
 
 Finally, since the token array is also a local variable, the final score is +0.891.
 
-\subsection{Neural text generation}
-Word2Vec
-Mechnism
+\subsection{Neural network text generation}
+A neural network text generation can be accomplished in 4 steps. We demonstrate this by an example of predicting the next word given a sentence in Shakespeare's style. 
+
+First, the system reads the data and create the dictionary of words. The data includes all Shakespeare's works. Moreover, because neural networks can only process with numeric values, it need a way to represent word by numbers, namely word embedding. There are many ways to map words, such as one-hot embedding and word2vec. 
+
+Second, the system builds 2 lists that are used as the inputs of the neural networks. One list contains a word sequence, and the other one contains the next word. For example, the sentence \textit{"Over hill, over dale"} can create 3 pairs of data. The first sequence is \textit{over} and the next word is \textit{hill}. The second sequence is \textit{over hill} and the next word is \textit{over}. The last sequence is \textit{over hill over} and the corresponding next word is \textit{dale}. After obtaining the data, we need to map each word to a numeric value by using word embedding.
+
+Third, input the data and train the neural networks with it. 
+
+Finally, predict the probability of the next word given a word sequence. For example, given a sentence \textit{ake thee of} then the word \textit{thy} would have the highest probability to be the next word calculated by the neural networks model.
+
+Moreover, if the user wants to generate a sentence, they need to iterate the last procedure after append the word with the highest probability to the end of the previous word sequence. To be more specific, the probability of the next word is calculated by the neural model given the word sequence \textit{ake thee of thy}.
+
 
 \section{Problem}
 Although keyword programming can help a user to complete the program conveniently, there is still a problem that the expected expression, especially a complicated one, is not able to be shown as the first candidate.
@@ -226,7 +236,6 @@ For example, if a user wants to read the standard input information from console
 When the programmer uses keyword programming to get this expression, after the user types the keywords \textbf{reader in} and triggers the system, the first candidate would be \texttt{new InputStreamReader(System.in)}, and the 12th candidate is the expected expression \texttt{new BufferedReader(new InputStreamReader(System.in))}. 
 
 
-% Likewise, if the user wants to display a message on the console, the expression could be \texttt{System.out.println(message)}. Given a keyword query \textbf{println message}, the first candidate is \texttt{System.err.println(message)} and the second one is \texttt{System.out.println(message)}.
 
 In the previous research, an expression is 90\% to be shown on the top of the recommendation list if the keywords use as same tokens as in the expression. For example, given a keyword query \textbf{new buffered reader new input stream reader system in}, the expression \texttt{new BufferedReader(new InputStreamReader(System.in))} would be the first candidate.
 
@@ -247,15 +256,15 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class ReadInput{
-	public static void main(String[] args){
-	    reader in|
-	}
+    public static void main(String[] args){
+        reader in|
+    }
 }
 \end{lstlisting}
 
 By using the original scoring function, the score of the expression is +1.74. 
 
-Subsequently, to calculate the occurance probability of the expression \texttt{new BufferedReader(new InputStreamReader(System.in))}, we need 7 steps. 
+Subsequently, to calculate the occurance probability of the expression \texttt{new BufferedReader(new InputStreamReader(System.in))}, we need 3 steps. 
 
 First, we take the token sequence from \texttt{import} to \texttt{args} as an argument and predict the probability of the token \texttt{new} by the neural network model. 
 
@@ -267,29 +276,110 @@ Thus, in the new scoring function, the final score for the expression \texttt{ne
 
 By exploiting the implicit information from the previous codes and considering the context, an expression would have a higher probability value if it is more likely to be the next expression. 
 
-These implicit information includes the imported package declaration, the identifier names and the order of previous method invocations. For example, in the preceding program, the program has imported two package \textit{java.io.BufferedReader} and \textit{java.io.InputStreamReader}. Moreover, the class name is \textit{ReadInput}. The user is more likely to write the expression \texttt{new BufferedReader(new InputStreamReader(System.in))} than \texttt{new InputStreamReader(System.in)}. Therefore, the probability of the former expression is higher than the latter one. In other words, the candidate expression \texttt{new BufferedReader(new InputStreamReader(System.in))} could be shown in a higher position.
+These implicit information includes the imported package declaration, the identifier names and the order of previous method invocations. For example, in the preceding program, the program has imported two classes \textit{java.io.BufferedReader} and \textit{java.io.InputStreamReader}. Moreover, the class name is \textit{ReadInput}. The user is more likely to write the expression \texttt{new BufferedReader(new InputStreamReader(System.in))} than \texttt{new InputStreamReader(System.in)}. Therefore, the probability of the former expression is higher than the latter one. In other words, the candidate expression \texttt{new BufferedReader(new InputStreamReader(System.in))} could be shown in a higher position.
 
+\begin{lstlisting}[language=Java]
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.FileReader;
+
+public class Read{
+    public static void main(String[] args){
+        String path = "foo.in";
+        reader file|
+    }
+}
+\end{lstlisting}
+ 
+ Neural network text generation and keyword programming are complementary, that is why we conbine these two technique. 
+
+ Neural network text generation could distinguish which expression is likely to be used afterwards. For example, if the program imports classes \textit{java.io.BufferedReader}, \textit{java.io.InputStreamReader} and \textit{java.io.FileReader}. Both \texttt{new BufferedReader(new InputStreamReader(System.in))} and \texttt{new BufferedReader(new FileReader(path))} have a higher probability to be the next expression.
+
+ Then keyword programming can represent the user's intention. For example, if they want to read the input from the specified file, the keyword query would be \textbf{reader file}. Then the candidate \texttt{new BufferedReader(new FileReader(path))} is more likely to be shown in the recommenedation list. On the other hand, if the user wants to read the input from the console, then the keyword query becomes \textbf{reader in}. As a result, \texttt{new BufferedReader(new InputStreamReader(System.in))} would be shown in the toppest of the recommendation list.
 
 \section{Implementation}
 
-Beam Search
+We build an Eclipse plug-in to implement our idea. The plug-in is written in Java. We named this plug-in as ACKN, which shorts for \textbf{A}uto \textbf{C}ompletion with \textbf{K}eyword programming and \textbf{N}eural network text generation.
 
-Word2Vec
+\subsection{Search expression from all generations}
+It is a search problem to select partial expressions to show on the recommendation list from all possible generations. Although a static programming language like Java has type constraints that can limit the size of generations, it is still unpossible to show all available candidates.
 
-LSTM
+In the previous research, they used dynamic programming and A* algorithm. In ACKN, we use another greedy algorithm called beam search.
+
+Beam search is a heuristic graph search algorithm. It is based on breadth first search with width constraint. To be more specific, in each depth, it first sorts the candidates by a scoring function. Then, instead of all branches, beam search cut the branches with lower score and continue to search on the remaining branches. \textit{bw} stands for the number of remaining branches for each depth.
+
+% TODO + (Figure)
+For example, suppose we want to select expressions with beam search from generations shown in Figure x. Given the keyword query is \textbf{read}, the system can calculate the score for each generation. With beam search, if the \textit{bw} is 3, then the beam search algorithm is same as breadth first search. If the \textit{bw} is 2, then the second branch of depth 2 and the third branch of depth 3 would be eliminated. In other words, the expression \texttt{} and \textt{} would remain as the result.
+
+\subsection{Preprocessing the training data}
+\label{subsection:Preprocessing}
+Subsequently, we need 2 steps before learning from the neural networks. One is to reduce some unnecessary information from the training program, and another is to transform the code into numbers.
+
+First, we eliminate the comment of each program and transform all string literal to \textit{``stringliteral''}. Since we want to focus on the information from methods and variables, we ignore these noise.
+
+After this step, we use word2vec to map each token to a vector value. 
+
+There are two reasons why we use word2vec. 
+
+First, in contrast to traditional embedding approach such as one-hot embedding, word2vec can represent a word in a lower dimension. Thus, it requires less memory to store the data and it is faster to train the neural networks model with those data. 
+
+Second, word2vec can make sentence generator recognize synonyms in the context. Different programmers have different naming styles, word2vec can ignore the difference between two similar words to the greatest extend. 
+
+% TODO + Figure
+For example, in figure x, program A and B are two programs that has a difference in line x. After using word2vec to map each word to a vector, we can measure the similarity of these two word by calculating the cosine similarity between these two vectors. In this case, the similarity between \texttt{} and \texttt{} is . Therefore, these two programs can be treated as similar programs.
+
+We implemented the word2vec by using the gensim package.
+
+Moreover, we use LSTM as the neural networks model of the neural network text generator. We implement the LSTM networks by using the keras deep learning package.
 
 \section{Evaluation}
 \subsection{Procedure}
+We evaluate ACKN by following five steps. 
+
+First, we prepare 15 expressions decided by ourselves. 
+
+Then, for each expression, we search on the github and collect 21 programs containing the expression in the former step.
+
+After we get the programs, we add 20 of 21 programs for each to the training dataset of the LSTM model. In order to avoid overfitting, we also add 5000 Java programs from the dataset built to evaluate the implementation in the ~\cite{Dataset}, which are the top active Java GitHub projects on January 22nd 2015.
+
+Subsequently, we create a task for each by using the remaining one program. We erase the code of the expression in that program. and make it to be a program with a hole. And for each expression, we think a keyword query that can describe the expression. 
+
+Finally, we run each task on both ACKN and the original keyword programming system. Then, compare the position where the expected expression is in each recommendation list. The recommendation list only show the first 30 results.
 
 \subsection{Result}
+Figure x shows the expected expression and corresponding keyword. 
 
-\subsection{Discussion}
+Figure x shows the rank of the expected expression in the result and the first result by using the original keyword programming system. Figure x shows the rank and the first result by using ACKN.
+
+% \subsection{Discussion}
+
+By using the existing keyword programming,11 tasks can show the expected expression on the list and the expected expression are in the top-5 results in 8 tasks. In contrast, by using ACKN, 10 tasks can show on the recommendation list, and 5 tasks are in the top-5 results.
 
 \section{Future Work}
-Word2Vec
-Speed: NN
 
-\section{Related Work}
+\subsection{Support synonyms in the keyword query}
+A keyword programming user would use similar words to the substrings of the expected expression in the keyword query. For example, if the user wants to print a file's name on the console, the expression would be \texttt{System.out.print(filename)}. Instead of using \textbf{print filename} as the keyword query, the user would type \textbf{display path}. For a human being, the meaning between two keyword querys are basically identical, whereas it is different for a machine. 
+
+One approach is to use word2vec. As we introduced in the section~\ref{subsection:Preprocessing}, variable names such as \texttt{filename} and \texttt{path} can be recognized as synonym when the surrounding codes are similar. 
+
+However, the word \texttt{display} and \texttt{print} can not be counted as similar with this approach. Because in the programming world, similarity stands for similar function, not similar meaning in the natural language. For instance, \texttt{print} and \texttt{println} can be considered as similar tokens. Because they are often written after the code fragment \texttt{System.out}.
+
+\subsection{Shorten completion time}
+
+In ACKN, we have to calculate the probability for each generation. Thus, it always costs few minutes to get the result and show it on the monitor, which are not acceptable for a code recommendation system. 
+
+% TODO
+
+\subsection{Using different neural networks}
+Except LSTM, there are also many neural networks that can be used in text generation. For example, the gated recurrent unit(GRU), generative pre-training(GPT), or generative adversarial nets(GANs). In addition, the LSTM model can be improved by using a attention mechanism. 
+
+\subsection{Adding more training data}
+Although we use nearly 5000 program as our training data, it is still not enough for a deep learning issue. Therefore, it is neccessary to add more training data to avoid overfitting.
+
+% \section{Related Work}
+% Learning from Example : 
+
+% NLP2Code : 
 
 \section{Conclusion}
 
@@ -317,6 +407,8 @@ Speed: NN
 
 
 \bibitem{LSTM} Hochreiter S, Schmidhuber J. Long short-term memory[J]. Neural computation, 1997, 9(8): 1735-1780.
+
+\bibitem{Dataset} Allamanis M, Barr E T, Bird C, et al. Suggesting accurate method and class names[C]//Proceedings of the 2015 10th Joint Meeting on Foundations of Software Engineering. 2015: 38-49.
 
 \end{thebibliography}
 
