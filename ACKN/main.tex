@@ -33,7 +33,7 @@
  
 \lstset{style=mystyle}
 
-
+\newcommand{\secref}[1]{Section~\ref{#1}}
 
 \begin{document}
 
@@ -111,7 +111,7 @@ For example, TabNine~\cite{TabNine} and Bruch et al.'s work~\cite{Marcel} extrac
 %   year={2019}
 % }
 
-Those system exploit corpora by using statistical methods in order to cope with large corpora.  Bruch et al.\ use a clustering method, for example.  TabNine uses a deep learning method~\cite{deep-tabnine2019} called GPT-2~\cite{radford2019language}.  Our work also uses a deep learning method for augmenting the keyword programming with the corpus knowledge.  We will explain a fundamental mechanism of using a deep learning method for exploitting a corpus in the next section.
+Those system exploit corpora by using statistical methods in order to cope with large corpora.  Bruch et al.\ use a clustering method, for example.  TabNine uses a deep learning method~\cite{deep-tabnine2019} called GPT-2~\cite{radford2019language}.  Our work also uses a deep learning method for augmenting the keyword programming with the corpus knowledge.  We will explain a fundamental mechanism of using a deep learning method for exploiting a corpus in the next section.
 
 %%%%%%%%%%%%%%%% Deleted as they will be explained in Section 2.
 
@@ -125,17 +125,19 @@ Those system exploit corpora by using statistical methods in order to cope with 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO: from here
 
-In this paper, we propose a code recommendation system that improves the existing keyword programming system by using neural text generation to concern the context of the user’s editing file.
+This paper proposes a method of improving the keyword programming by exploiting program corpus knowledge.  With the support from a neural network based sentence generator, it tries to recommend expressions not just containing the programmer provided keywords, but those more likely appear in the corpus.  By dosing so, we aim at making the keyword programming usable for larger expressions.  
 
-Our goal is to build a code recommendation system that:
-\begin{enumerate}
-\item Suitable to all programmers including a beginner and an expert.
-\item Recommend the expression that satisfies the user’s purpose, especially when the expression is complex.
-\end{enumerate}
+The rest of the paper is organized as follows.  We first introduce how the original keyword programming recommends expressions based on the generate-and-ranking method.  We also overview what a neural network can generate sentences with a corpus (\secref{sec:background}).  We then illustrate that the original keyword programming works poorly for recommending larger expressions (\secref{sec:problem}).  We present our proposal, which lets the keyword programming recommend expressions that more likely appear in the corpus, based on the probabilities from the sentence generator (\secref{sec:proposal}).  We implemented the proposal as an Eclipse plug-in called ACKN (\secref{sec:implementation}) and evaluated the proposal by performing an experiment of inserting 15 expressions with the original and proposed keyword programming (\secref{sec:evaluation}). 
 
-We implement a plug-in on Eclipse named ACKN based on a context-aware keyword programming technique. 
+% Our goal is to build a code recommendation system that:
+% \begin{enumerate}
+% \item Suitable to all programmers including a beginner and an expert.
+% \item Recommend the expression that satisfies the user’s purpose, especially when the expression is complex.
+% \end{enumerate}
 
-\section{Background}
+% We implement a plug-in on Eclipse named ACKN based on a context-aware keyword programming technique. 
+
+\section{Background}\label{sec:background}
 \subsection{Keyword Programming}
 Keyword programming is a technique that translates a keyword query to an expression. A keyword programming system has four parts, namely input, extraction, generation, and ranking. 
 
@@ -226,7 +228,7 @@ Finally, predict the probability of the next word given a word sequence. For exa
 Moreover, if the user wants to generate a sentence, they need to iterate the last procedure after append the word with the highest probability to the end of the previous word sequence. To be more specific, the probability of the next word is calculated by the neural model given the word sequence \textit{ake thee of thy}.
 
 
-\section{Problem}
+\section{Problem}\label{sec:problem}
 Although keyword programming can help a user to complete the program conveniently, there is still a problem that the expected expression, especially a complicated one, is not able to be shown as the first candidate.
 
 For example, if a user wants to read the standard input information from console, in Java, most of users would write the expression \texttt{new BufferedReader(new InputStreamReader(System.in))}. 
@@ -243,7 +245,7 @@ By using the scoring function in the section~\ref{subsubsection:Ranking}, the sc
 
 The reason is that an expression has a higher score calculated by the scoring function when it is shorter and contains more keywords. Therefore, when the expected expression becomes more complicated and the number of keywords is relatively fewer, it is hard to be shown in a higher position in the recommendation list. In this paper, complicate denotes that the expression has a larger abstract syntax tree or contains many tokens. For instance, the height of \texttt{new BufferedReader(new InputStreamReader(System.in))} is 4, and it contains 9 tokens from \texttt{new} to \texttt{in}.
 
-\section{Proposal: Using a NN text generator}
+\section{Proposal: Using a NN text generator}\label{sec:proposal}
 Our proposal is to use a neural network text generator to recommend more context-dependent expressions.
 
 The approach is straightforward. For each expression, we calculate not only a score by the orginal scoring function but also the occurance probability. We add these two values to represent the final score of the expression.
@@ -295,7 +297,7 @@ public class Read{
 
  Then keyword programming can represent the user's intention. For example, if they want to read the input from the specified file, the keyword query would be \textbf{reader file}. Then the candidate \texttt{new BufferedReader(new FileReader(path))} is more likely to be shown in the recommenedation list. On the other hand, if the user wants to read the input from the console, then the keyword query becomes \textbf{reader in}. As a result, \texttt{new BufferedReader(new InputStreamReader(System.in))} would be shown in the toppest of the recommendation list.
 
-\section{Implementation}
+\section{Implementation}\label{sec:implementation}
 
 We build an Eclipse plug-in to implement our idea. The plug-in is written in Java. We named this plug-in as ACKN, which shorts for \textbf{A}uto \textbf{C}ompletion with \textbf{K}eyword programming and \textbf{N}eural network text generation.
 
@@ -330,7 +332,7 @@ We implemented the word2vec by using the gensim package.
 
 Moreover, we use LSTM as the neural networks model of the neural network text generator. We implement the LSTM networks by using the keras deep learning package.
 
-\section{Evaluation}
+\section{Evaluation}\label{sec:evaluation}
 \subsection{Procedure}
 We evaluate ACKN by following five steps. 
 
