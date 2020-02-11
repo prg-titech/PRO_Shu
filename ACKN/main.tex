@@ -113,16 +113,18 @@ For example, TabNine~\cite{TabNine} and Bruch et al.'s work~\cite{Marcel} extrac
 
 Those system exploit corpora by using statistical methods in order to cope with large corpora.  Bruch et al.\ use a clustering method, for example.  TabNine uses a deep learning method~\cite{deep-tabnine2019} called GPT-2~\cite{radford2019language}.  Our work also uses a deep learning method for augmenting the keyword programming with the corpus knowledge.  We will explain a fundamental mechanism of using a deep learning method for exploitting a corpus in the next section.
 
+%%%%%%%%%%%%%%%% Deleted as they will be explained in Section 2.
+
+% On the other hand, neural networks have developed rapidly in the past 20 years and have shown their strong power in many genres. One of them is the text generation, which aims to generate a likely sentence. Those neural networks text generators are divided by using different neural networks.~\cite{NNTG}
+
+% In 2003, Bengio et al.~\cite{Bengio} first use a standard neural model that extends the n-gram paradigm with neural networks. 
+
+% Then,a recurrent neural network language model~\cite{RNN} is used in text generation because it can process time-series data.
+
+% Moreover, a long short term model(LSTM)~\cite{LSTM} is an optimized RNN designed for learning the long term dependency. In contrast to the standard RNN, LSTM has a better performance to learn from more complicated data.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO: from here
 
-On the other hand, neural networks have developed rapidly in the past 20 years and have shown their strong power in many genres. One of them is the text generation, which aims to generate a likely sentence. Those neural networks text generators are divided by using different neural networks.~\cite{NNTG}
-
-In 2003, Bengio et al.~\cite{Bengio} first use a standard neural model that extends the n-gram paradigm with neural networks. 
-
-Then,a recurrent neural network language model~\cite{RNN} is used in text generation because it can process time-series data.
-
-Moreover, a long short term model(LSTM)~\cite{LSTM} is an optimized RNN designed for learning the long term dependency. In contrast to the standard RNN, LSTM has a better performance to learn from more complicated data.
-		
 In this paper, we propose a code recommendation system that improves the existing keyword programming system by using neural text generation to concern the context of the user’s editing file.
 
 Our goal is to build a code recommendation system that:
