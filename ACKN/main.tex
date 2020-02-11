@@ -138,6 +138,7 @@ The rest of the paper is organized as follows.  We first introduce how the origi
 % We implement a plug-in on Eclipse named ACKN based on a context-aware keyword programming technique. 
 
 \section{Background}\label{sec:background}
+% TODO: in introduction, define terms like "expression-level recommendation" and "identifier-level recommendation"
 \subsection{Keyword Programming}
 The keyword programming~\cite{KeywordProgramming} is an expression-level recommendation system based on keywords.  It is used when the programmer wants to write an expression (\emph{the desired expression})\footnote{The keyword programming system can recommend not only expressions but also one or multiple statements.  Here, we only explain the case for expressions for simplicity.} in a partially written program (\emph{the program context}), by typing a set of words (\emph{the keywords}) into the position where it should appear (\emph{the cursor position}).  The system then shows an ordered list of expressions (\emph{the recommendations}), one of which will be selected by the programmer and inserted into the cursor position. Below, we explain the mechanism in the four steps, namely reading keywords, extracting context information, expression generation, and ranking. 
 
@@ -147,57 +148,68 @@ The keyword programming~\cite{KeywordProgramming} is an expression-level recomme
 
 The keywords are set of words separated by a space character, and should be part of the desired expression.  Similar to the keyword-based web search engines, the user of the keyword programming needs to select the words that represent the desired expression well.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO from here
+Even when the programmer does not exactly know the desired expression, it is possible to provide keywords by using the terms at the semantic level.  For example, when the programmer wants to display the file name of the variable \texttt{f} of the type \texttt{File}, providing ``\texttt{print f name}'' can lead to a recommendation \texttt{System.out.print(f.getName())} without knowing the exact method name.
 
-The keyword query is similar to the search query of a search engine, which conveys the programmer’s intention. For example, if a programmer wants to write an expression to display the name of a variable \texttt{f} on the monitor, the keyword query would be \textbf{print f name}. If the user wants to get the max number between number a and number b, they could use \textbf{get maximum between a and b}.
+% If the user wants to get the max number between number a and number b, they could use \textbf{get maximum between a and b}.
 
-The keyword query is the whole tokens in the line where the cursor position is in the active editor. From the information of a cursor position, the system can know which local variable can be referred and which method can be called in that position.
-
-\subsubsection{Extraction}
-Keyword programming extracts essential information before generation. The information includes:
+\subsubsection{Extracting Context Information}
+As program context, the system extracts information of
 \begin{itemize}
-\item all available object class name,
-\item the name and type of a local variable,
-\item the name, type, and object class of a field, and
-\item the name, return type, object class, and argument types of a method.
+\item the variables and their types that can be referenced at the cursor position, and 
+\item the types (including method and field signatures) available in the program files.
 \end{itemize}
+The information will be used for generating expressions that have valid types in the next step.
 
-For example, supposed the system wants to generate the expression \texttt{System.out.println(result)}. First, it is necessary to know the information of a class name \texttt{System}. And a field \texttt{out} that is in the object class \textit{System} and return the type \textit{PrintStream}. Also, a method named \texttt{println} where the receiver type is \textit{PrintStream}, the return type is \textit{void} and the argument type is \textit{String}. Finally, a local variable \texttt{result} that returns the type \textit{String}.
+% Keyword programming extracts essential information before generation. The information includes:
+% \begin{itemize}
+% \item all available object class name,
+% \item the name and type of a local variable,
+% \item the name, type, and object class of a field, and
+% \item the name, return type, object class, and argument types of a method.
+% \end{itemize}
 
-\subsubsection{Generation}
-After obtaining those elements from a source file, the system generates all possible expressions that obey the syntax and type rules of the programming language. For instance, considering the program
+% For example, supposed the system wants to generate the expression \texttt{System.out.println(result)}. First, it is necessary to know the information of a class name \texttt{System}. And a field \texttt{out} that is in the object class \textit{System} and return the type \textit{PrintStream}. Also, a method named \texttt{println} where the receiver type is \textit{PrintStream}, the return type is \textit{void} and the argument type is \textit{String}. Finally, a local variable \texttt{result} that returns the type \textit{String}.
 
-\begin{lstlisting}[language=Java]
-package example;
+\subsubsection{Expression Generation}
+The system then generates all valid expressions and passes them to the next ranking step.  A ``valid'' expression is such an expression that will be safely compiled when it is inserted at the cursor position.  Since there can be infinitely many valid expressions, an implementation actually generates only expressions with a limited size, and avoids generating expressions that will have lower scores in the next step.
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+% After obtaining those elements from a source file, the system generates all possible expressions that obey the syntax and type rules of the programming language. For instance, considering the program
 
-public class Example{
-    public static void main(String[] args){
-        String result = ``result'';
-    }
+%%%%%%%%% TODO: show this example at the beginning of section 2.1
 
-    public List getLines(BufferedReader src) throws IOException{
-        List array = new ArrayList();
-        while(src.ready()){
-            |
-        }
+% \begin{lstlisting}[language=Java]
+% package example;
 
-        return null;
-    }
-}
-\end{lstlisting}
+% import java.io.BufferedReader;
+% import java.io.IOException;
+% import java.util.ArrayList;
+% import java.util.List;
 
-The cursor is in line 16. In this line, we can call the method and field in the class \textit{BufferedReader}, \textit{IOException}, \textit{ArrayList} and \textit{List}. Moreover, we also can refer the variable \texttt{src} and \texttt{array}. Therefore, a method invocation such as \texttt{array.add(src.readLine())} is available, where \texttt{add} is one of the methods declared in the class \textit{List}, and \texttt{readLine} is a method declared in the class \textit{BufferedReader}. 
+% public class Example{
+%     public static void main(String[] args){
+%         String result = ``result'';
+%     }
 
-However, an expression like \texttt{System.out.print(result)} would lead to a compile error, because it is not able to refer the variable \texttt{result} in the line 10. Another method invocation such as \texttt{result.print()} is also forbidden since it does not follow the type rules.
+%     public List getLines(BufferedReader src) throws IOException{
+%         List array = new ArrayList();
+%         while(src.ready()){
+%             |
+%         }
 
+%         return null;
+%     }
+% }
+% \end{lstlisting}
+
+% The cursor is in line 16. In this line, we can call the method and field in the class \textit{BufferedReader}, \textit{IOException}, \textit{ArrayList} and \textit{List}. Moreover, we also can refer the variable \texttt{src} and \texttt{array}. Therefore, a method invocation such as \texttt{array.add(src.readLine())} is available, where \texttt{add} is one of the methods declared in the class \textit{List}, and \texttt{readLine} is a method declared in the class \textit{BufferedReader}. 
+
+% However, an expression like \texttt{System.out.print(result)} would lead to a compile error, because it is not able to refer the variable \texttt{result} in the line 10. Another method invocation such as \texttt{result.print()} is also forbidden since it does not follow the type rules.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO from here
 
 \subsubsection{Ranking}
 \label{subsubsection:Ranking}
+
 The code completion system of Eclipse organizes the recommendation alphabetically. For example, the method \texttt{add} shows in front of the method \texttt{concat} on the recommendation list.
 
 In contrast, a keyword programming system shows the recommendations in the order of scores calculated by rules that:
