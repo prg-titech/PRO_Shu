@@ -139,10 +139,16 @@ The rest of the paper is organized as follows.  We first introduce how the origi
 
 \section{Background}\label{sec:background}
 \subsection{Keyword Programming}
-Keyword programming is a technique that translates a keyword query to an expression. A keyword programming system has four parts, namely input, extraction, generation, and ranking. 
+The keyword programming~\cite{KeywordProgramming} is an expression-level recommendation system based on keywords.  It is used when the programmer wants to write an expression (\emph{the desired expression})\footnote{The keyword programming system can recommend not only expressions but also one or multiple statements.  Here, we only explain the case for expressions for simplicity.} in a partially written program (\emph{the program context}), by typing a set of words (\emph{the keywords}) into the position where it should appear (\emph{the cursor position}).  The system then shows an ordered list of expressions (\emph{the recommendations}), one of which will be selected by the programmer and inserted into the cursor position. Below, we explain the mechanism in the four steps, namely reading keywords, extracting context information, expression generation, and ranking. 
 
-The user first inputs a keyword query in the source code. Then the system collects the information of local variables and methods from the source code and generates all possible expressions by following the syntax and typing rules. Finally, the system calculates the scores of those expressions and shows that have higher scores.
-\subsubsection{Input}
+% The user first inputs a keyword query in the source code. Then the system collects the information of local variables and methods from the source code and generates all possible expressions by following the syntax and typing rules. Finally, the system calculates the scores of those expressions and shows that have higher scores.
+\subsubsection{Keywords}
+%As explained in the previous section, the keyword programming requires \emph{keywords} as an explicit input from the programmer.
+
+The keywords are set of words separated by a space character, and should be part of the desired expression.  Similar to the keyword-based web search engines, the user of the keyword programming needs to select the words that represent the desired expression well.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO from here
+
 The keyword query is similar to the search query of a search engine, which conveys the programmer’s intention. For example, if a programmer wants to write an expression to display the name of a variable \texttt{f} on the monitor, the keyword query would be \textbf{print f name}. If the user wants to get the max number between number a and number b, they could use \textbf{get maximum between a and b}.
 
 The keyword query is the whole tokens in the line where the cursor position is in the active editor. From the information of a cursor position, the system can know which local variable can be referred and which method can be called in that position.
