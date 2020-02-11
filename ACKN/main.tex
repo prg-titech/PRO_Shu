@@ -60,6 +60,7 @@ While a typical implementation presents the names of available methods/functions
 there are many variations with respect to the lengths of the presented code fragments (from function names to a few lines of code), and with respect to information used for making recommendations.
 
 Information used for making recommendations can roughly be classified into two kinds, namely \emph{explicit} intention and \emph{implicit} context.  
+% TODO: they are not exclusive, rather used in combination.
 
 Explicit intention is the information that the programmer provides to the system when he or she wants to obtain recommendation.  Examples are \emph{prefix letters}, \emph{an abbreviation}, and \emph{keywords}.  When the programmer wants to type \texttt{InputStreamReader}, he or she can type ``\texttt{Inp}'' or ``\texttt{ISR}'' to a prefix-based or abbreviation-based system, respectively, then the system will generate identifiers that start with \texttt{Inp} or that are concatenation of words starting from \texttt{I}, \texttt{S} and \texttt{R}.  These kind of recommendation systems can be found many programming editors, for example Eclipse IDE.
 
@@ -84,13 +85,39 @@ Han et al.\ proposed a method to improve an abbreviation-based recommendation sy
 
 % Moreover, Sangmok Han et al.~\cite{Sangmok} and Sheng Hu et al.~\cite{Sheng} recommend possible code fragments given an abbreviated input. The former uses a Hidden Markov Model to expand the abbreviation to inputs, while the latter uses a Gaussian mixture model. 
 
-In addition, Greg little et al.~\cite{KeywordProgramming} propose an approach that the user types some keywords to search for an expected expression. And after the keyword programming system provides a list of candidate expressions, the user can look through the list and select the expected one. 
 
-Unlike the default code recommendation system on Eclipse, the user only needs to trigger the keyword programming system once to get the expected expression. For example, after type keywords \textbf{buffered reader in} and run the keyword programming system, the expression \texttt{new BufferedReader(InputStreamReader(System.in))} will be shown on the top of the recommendation list.
+% TODO: knowledge from a corpus 
 
-In contrast, implicit information denotes information that can be exploited from the context. These kinds of systems can be categorized by different statistical models.
+% In contrast, implicit information denotes information that can be exploited from the context. These kinds of systems can be categorized by different statistical models.
 
-For example, TabNine~\cite{TabNine} and Marcel Bruch et al.~\cite{Marcel} takes the whole context into consideration arranges the recommendations by their probabilities. The previous system calculates probabilities by a GPT-2 model and Marcel Bruch et al. utilize an algorithm named Best Matching Neighbors(BMN) based on the K-Nearest Neighbors algorithm. 
+Many recommendation systems use implicit context information in combination with knowledge from a corpus.  In other words, those systems recommend expressions/identifiers that ``programmers who wrote these also wrote.'' 
+For example, TabNine~\cite{TabNine} and Bruch et al.'s work~\cite{Marcel} extract a sequence of tokens or a sequence of method calls before the cursor position in the editor, and recommend expressions or identifiers that frequently appear in the expressions that share the same sequence in the corpus.  %  takes the whole context into consideration arranges the recommendations by their probabilities. The previous system calculates probabilities by a GPT-2 model and Marcel Bruch et al. utilize an algorithm named Best Matching Neighbors(BMN) based on the K-Nearest Neighbors algorithm. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO from here
+
+% https://tabnine.com/blog/deep/
+
+% @Misc{deep-tabnine2019,
+%   author = 	 {{TabNine, Inc.}},
+%   title = 	 {Autocompletion with deep learning},
+%   howpublished = {https://tabnine.com/blog/deep/},
+%   month = 	 {July 15},
+%   year = 	 2019,
+%   note = 	 {Accessed February 11, 2020.}}
+
+% GPT-2
+% @article{radford2019language,
+%   title={Language models are unsupervised multitask learners},
+%   author={Radford, Alec and Wu, Jeffrey and Child, Rewon and Luan, David and Amodei, Dario and Sutskever, Ilya},
+%   journal={OpenAI Blog},
+%   volume={1},
+%   number={8},
+%   pages={9},
+%   year={2019}
+% }
+
+
+Using 
 
 On the other hand, neural networks have developed rapidly in the past 20 years and have shown their strong power in many genres. One of them is the text generation, which aims to generate a likely sentence. Those neural networks text generators are divided by using different neural networks.~\cite{NNTG}
 
