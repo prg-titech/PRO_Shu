@@ -378,20 +378,9 @@ Subsequently, we need 2 steps before learning from the neural networks. One is t
 
 First, we eliminate the comment of each program and transform all string literal to \textit{``stringliteral''}. Since we want to focus on the information from methods and variables, we ignore these noise.
 
-After this step, we use word2vec to map each token to a vector value. 
+After this step, we use word2vec to map each token to a vector value. We implemented the word2vec by using the gensim package.
 
-There are two reasons why we use word2vec. 
-
-First, in contrast to traditional embedding approach such as one-hot embedding, word2vec can represent a word in a lower dimension. Thus, it requires less memory to store the data and it is faster to train the neural networks model with those data. 
-
-Second, word2vec can make sentence generator recognize synonyms in the context. Different programmers have different naming styles, word2vec can ignore the difference between two similar words to the greatest extend. 
-
-% TODO + Figure
-For example, in figure x, program A and B are two programs that has a difference in line x. After using word2vec to map each word to a vector, we can measure the similarity of these two word by calculating the cosine similarity between these two vectors. In this case, the similarity between \texttt{} and \texttt{} is . Therefore, these two programs can be treated as similar programs.
-
-We implemented the word2vec by using the gensim package.
-
-Moreover, we use LSTM as the neural networks model of the neural network text generator. We implement the LSTM networks by using the keras deep learning package.
+Subsequently, we use LSTM as the neural networks model of the neural network text generator. We implement the LSTM networks by using the keras deep learning package.
 
 \section{Evaluation}\label{sec:evaluation}
 \subsection{Procedure}
