@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.12.5)  12 FEB 2020 19:54
+This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.12.5)  12 FEB 2020 23:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -4328,100 +4328,24 @@ Overfull \hbox (15.83995pt too wide) in paragraph at lines 286--287
 [3] (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/02/27 1.8b listings language file
 )
-Underfull \hbox (badness 10000) in paragraph at lines 383--384
-[]\OT1/cmr/m/n/9.25 Subsequently, to cal-cu-late the oc-cu-rance prob-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 383--384
-\OT1/cmr/m/n/9.25 a-bil-ity of the ex-pres-sion \OT1/cmtt/m/n/9.25 new Buffered
-Reader(new
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 391--392
-[]\OT1/cmr/m/n/9.25 Thus, in the new scor-ing func-tion, the fi-nal
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 391--392
-\OT1/cmr/m/n/9.25 score for the ex-pres-sion \OT1/cmtt/m/n/9.25 new BufferedRea
-der(new
- []
-
-
-Underfull \hbox (badness 6944) in paragraph at lines 395--396
-\OT1/cmr/m/it/9.25 java.io.BufferedReader \OT1/cmr/m/n/9.25 and \OT1/cmr/m/it/9
-.25 java.io.InputStreamReader\OT1/cmr/m/n/9.25 .
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 395--396
-\OT1/cmr/m/n/9.25 More-over, the class name is \OT1/cmr/m/it/9.25 Read-In-put\O
-T1/cmr/m/n/9.25 . The
- []
-
-
-Underfull \hbox (badness 8189) in paragraph at lines 395--396
-\OT1/cmr/m/n/9.25 user is more likely to write the ex-pres-sion \OT1/cmtt/m/n/9
-.25 new
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 395--396
-\OT1/cmtt/m/n/9.25 BufferedReader(new InputStreamReader(System.in))
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 395--396
-\OT1/cmtt/m/n/9.25 BufferedReader(new InputStreamReader(System.in))
- []
-
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 412--413
-[]\OT1/cmr/m/n/9.25 Neural net-work text gen-er-a-tion could dis-tin-
- []
-
-
-Underfull \hbox (badness 4621) in paragraph at lines 412--413
-\OT1/cmr/m/n/9.25 guish which ex-pres-sion is likely to be used af-ter-
- []
-
-
-Underfull \hbox (badness 4872) in paragraph at lines 412--413
-\OT1/cmr/m/it/9.25 java.io.BufferedReader\OT1/cmr/m/n/9.25 , \OT1/cmr/m/it/9.25
- java.io.InputStreamReader \OT1/cmr/m/n/9.25 and
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 412--413
-\OT1/cmr/m/it/9.25 java.io.FileReader\OT1/cmr/m/n/9.25 . Both \OT1/cmtt/m/n/9.2
-5 new BufferedReader(new
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 412--413
-\OT1/cmtt/m/n/9.25 InputStreamReader(System.in)) \OT1/cmr/m/n/9.25 and \OT1/cmt
-t/m/n/9.25 new
- []
-
 File: Figure/Overview.pdf Graphic file (type pdf)
 <Figure/Overview.pdf>
-LaTeX Font Info:    Calculating math sizes for size <7.82584> on input line 500
+LaTeX Font Info:    Calculating math sizes for size <7.82584> on input line 521
 .
-[5]
-Overfull \hbox (2.54337pt too wide) in paragraph at lines 546--547
+
+Overfull \hbox (2.54337pt too wide) in paragraph at lines 567--568
  [][] 
  []
 
 
-Overfull \hbox (9.8201pt too wide) in paragraph at lines 589--590
+Overfull \hbox (9.8201pt too wide) in paragraph at lines 610--611
  [][] 
  []
 
 File: Figure/ACKN.pdf Graphic file (type pdf)
 <Figure/ACKN.pdf>
-[6] (./main.bbl
+[5] (./main.bbl
 ! Undefined control sequence.
 l.5 \newblock
               Keyword programming in java.
@@ -4458,6 +4382,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
+[6]
 ! Undefined control sequence.
 l.16 \newblock
                Code completion from abbreviated input.
@@ -4651,12 +4576,12 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 3707 strings out of 493223
- 48479 string characters out of 6144415
- 359868 words of memory out of 5000000
- 7691 multiletter control sequences out of 15000+600000
- 35743 words of font info for 143 fonts, out of 8000000 for 9000
+ 3709 strings out of 493223
+ 48536 string characters out of 6144415
+ 335190 words of memory out of 5000000
+ 7693 multiletter control sequences out of 15000+600000
+ 36415 words of font info for 147 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
- 30i,15n,42p,1309b,1863s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 30i,15n,42p,1309b,1275s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on main.dvi (7 pages, 58884 bytes).
+Output written on main.dvi (7 pages, 54608 bytes).

@@ -361,57 +361,78 @@ To summarize, we would like to improve the original keyword programming on the f
 \item It gives the same ranking regardless the context.  However, it should rank expressions higher if the expressions frequently appear in the context at the cursor position.
 \end{itemize}
 
-\section{Proposal: Using a NN text generator}\label{sec:proposal}
-Our proposal is to use a neural network text generator to recommend more context-dependent expressions.
+\section{Proposal: Using a Text Generator to Improve the Keyword Programming}\label{sec:proposal}
+We propose a method to improve keyword programming by using a neural network based text generator.  The basic idea is straightforward: (1) it generates expressions based on the original keyword programming algorithm, (2) calculates the occurrence probabilities of those expressions with respect to the context by using a text generator, and (3) adds the probabilities into the original scores to get the ranking.  
 
-The approach is straightforward. For each expression, we calculate not only a score by the orginal scoring function but also the occurance probability. We add these two values to represent the final score of the expression.
+By using a neural network text generator, we expect that the proposal will improve the recommendations in the following two respects.
+\begin{itemize}
+\item By taking the occurrence probability of the generated expressions into account, the system can give higher ranks to the expressions that appear in the corpus more frequently.
+\item By providing the program text prior to the cursor into the text generator, the system can give higher ranks to the expressions that likely appear in the current context.
+\end{itemize}
 
-For example, if the user is editing a program where the cursor is in line 6, and the keyword query is \texttt{read in}:
-\begin{lstlisting}[language=Java]
+%Our proposal is to use a neural network text generator to recommend more context-dependent expressions.
+
+% The approach is straightforward. For each expression, we calculate not only a score by the orginal scoring function but also the occurance probability. We add these two values to represent the final score of the expression.
+
+The improved algorithm works in this way.
+\begin{enumerate}
+\item[a)] The system conceptually generates all possible expressions at the cursor position, and passes each generated expression to the scoring function.  This step is not different from the original keyword programming.
+\item[b)] For scoring a generated expression, it adds the score calculated by the original function (\ref{eq:scoring}) to the \emph{occurrence probability} of the expression.
+\end{enumerate}
+The occurrence probability of an expression is the sum of the probability of each token when they are inserted into the position where the keywords are written.  For example, when the programmer wrote the keywords \texttt{read in} at line~\ref{line:keyword} in the following program text:
+\begin{lstlisting}[language=Java,escapechar=@]
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class ReadInput{
     public static void main(String[] args){
-        reader in|
+        reader in|@\label{line:keyword}@
     }
 }
 \end{lstlisting}
+The occurrence probability of a generated expression \texttt{new BR(new InputStreamReader(System.in))} (for brevity we use \texttt{BR} for \texttt{BufferedReader} here) is
+\begin{eqnarray*}
+  P( \mathtt{new} &\mid& \mathtt{import},\ldots,\mathtt{args}) + \\
+  P( \mathtt{BR} &\mid& \mathtt{import},\ldots,\mathtt{args}, \mathtt{new}) +\\
+  P( \mathtt{new} &\mid& \mathtt{import},\ldots,\mathtt{args},\mathtt{new},\mathtt{BR}) +\\
+  \vdots\\
+  P( \mathtt{in} &\mid& \mathtt{import},\ldots,\mathtt{args},\mathtt{new},\mathtt{BR},\ldots,\mathtt{System})
+\end{eqnarray*}
+where $P(w \mid p_1,\ldots,p_n)$ denotes the occurrence probability of word $w$ after the sequence of words $p_1, \ldots, p_n$.  $P$ can be computed by successively providing $p_1, \ldots, p_n$ to the neural network, and observe $w$ in the last output.
 
-By using the original scoring function, the score of the expression is +1.74. 
+%Subsequently, to calculate the occurance probability of the expression \texttt{new BufferedReader(new InputStreamReader(System.in))}, we need 3 steps. 
 
-Subsequently, to calculate the occurance probability of the expression \texttt{new BufferedReader(new InputStreamReader(System.in))}, we need 3 steps. 
+%First, we take the token sequence from \texttt{import} to \texttt{args} as an argument and predict the probability of the token \texttt{new} by the neural network model. 
 
-First, we take the token sequence from \texttt{import} to \texttt{args} as an argument and predict the probability of the token \texttt{new} by the neural network model. 
+%Then, append the token \texttt{new} to the token sequence and predict the probability of the token \texttt{BufferReader}. Repeat this procedure until get the probability of the last token \texttt{in}. 
 
-Then, append the token \texttt{new} to the token sequence and predict the probability of the token \texttt{BufferReader}. Repeat this procedure until get the probability of the last token \texttt{in}. 
+% At this moment, we have 6 probability numbers for each tokens.  Finally, we add these 6 probabilities and use it to represent the occurance probability of the expression.
 
-At this moment, we have 6 probability numbers for each tokens.  Finally, we add these 6 probabilities and use it to represent the occurance probability of the expression.
+% Thus, in the new scoring function, the final score for the expression \texttt{new BufferedReader(new InputStreamReader(System.in))} is +(1.74 + \textit{probability}).
 
-Thus, in the new scoring function, the final score for the expression \texttt{new BufferedReader(new InputStreamReader(System.in))} is +(1.74 + \textit{probability}).
+% By exploiting the implicit information from the previous codes and considering the context, an expression would have a higher probability value if it is more likely to be the next expression. 
 
-By exploiting the implicit information from the previous codes and considering the context, an expression would have a higher probability value if it is more likely to be the next expression. 
+% These implicit information includes the imported package declaration, the identifier names and the order of previous method invocations. For example, in the preceding program, the program has imported two classes \textit{java.io.BufferedReader} and \textit{java.io.InputStreamReader}. Moreover, the class name is \textit{ReadInput}. The user is more likely to write the expression \texttt{new BufferedReader(new InputStreamReader(System.in))} than \texttt{new InputStreamReader(System.in)}. Therefore, the probability of the former expression is higher than the latter one. In other words, the candidate expression \texttt{new BufferedReader(new InputStreamReader(System.in))} could be shown in a higher position.
 
-These implicit information includes the imported package declaration, the identifier names and the order of previous method invocations. For example, in the preceding program, the program has imported two classes \textit{java.io.BufferedReader} and \textit{java.io.InputStreamReader}. Moreover, the class name is \textit{ReadInput}. The user is more likely to write the expression \texttt{new BufferedReader(new InputStreamReader(System.in))} than \texttt{new InputStreamReader(System.in)}. Therefore, the probability of the former expression is higher than the latter one. In other words, the candidate expression \texttt{new BufferedReader(new InputStreamReader(System.in))} could be shown in a higher position.
+% \begin{lstlisting}[language=Java]
+% import java.io.BufferedReader;
+% import java.io.InputStreamReader;
+% import java.io.FileReader;
 
-\begin{lstlisting}[language=Java]
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.FileReader;
-
-public class Read{
-    public static void main(String[] args){
-        String path = "foo.in";
-        reader file|
-    }
-}
-\end{lstlisting}
+% public class Read{
+%     public static void main(String[] args){
+%         String path = "foo.in";
+%         reader file|
+%     }
+% }
+% \end{lstlisting}
  
- Neural network text generation and keyword programming are complementary, that is why we conbine these two technique. 
+%  Neural network text generation and keyword programming are complementary, that is why we conbine these two technique. 
 
- Neural network text generation could distinguish which expression is likely to be used afterwards. For example, if the program imports classes \textit{java.io.BufferedReader}, \textit{java.io.InputStreamReader} and \textit{java.io.FileReader}. Both \texttt{new BufferedReader(new InputStreamReader(System.in))} and \texttt{new BufferedReader(new FileReader(path))} have a higher probability to be the next expression.
+%  Neural network text generation could distinguish which expression is likely to be used afterwards. For example, if the program imports classes \textit{java.io.BufferedReader}, \textit{java.io.InputStreamReader} and \textit{java.io.FileReader}. Both \texttt{new BufferedReader(new InputStreamReader(System.in))} and \texttt{new BufferedReader(new FileReader(path))} have a higher probability to be the next expression.
 
- Then keyword programming can represent the user's intention. For example, if they want to read the input from the specified file, the keyword query would be \textbf{reader file}. Then the candidate \texttt{new BufferedReader(new FileReader(path))} is more likely to be shown in the recommenedation list. On the other hand, if the user wants to read the input from the console, then the keyword query becomes \textbf{reader in}. As a result, \texttt{new BufferedReader(new InputStreamReader(System.in))} would be shown in the toppest of the recommendation list.
+%  Then keyword programming can represent the user's intention. For example, if they want to read the input from the specified file, the keyword query would be \textbf{reader file}. Then the candidate \texttt{new BufferedReader(new FileReader(path))} is more likely to be shown in the recommenedation list. On the other hand, if the user wants to read the input from the console, then the keyword query becomes \textbf{reader in}. As a result, \texttt{new BufferedReader(new InputStreamReader(System.in))} would be shown in the toppest of the recommendation list.
+
 
 \section{Implementation}\label{sec:implementation}
 
