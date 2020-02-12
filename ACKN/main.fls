@@ -32,6 +32,8 @@ INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/graphics/trig.sty
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/graphics/trig.sty
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/graphics-def/dvipdfmx.def
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/graphics-def/dvipdfmx.def
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/base/latexsym.sty
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/base/latexsym.sty
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/listings/listings.sty
@@ -127,11 +129,20 @@ INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/tgoth10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/goth10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
-INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmtt9.tfm
-INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmti9.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/tgoth10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/goth10.tfm
-INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmti9.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmtt9.tfm
+INPUT Figure/Eclipse.pdf
+INPUT extractbb -B cropbox -O Figure/Eclipse.pdf
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/tgoth10.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/goth10.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/tmin10.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/min10.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/tgoth10.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/goth10.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmti8.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/tmin10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/min10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
@@ -143,11 +154,21 @@ INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/ptex-fonts/standard/goth10.tf
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmssbx10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
 OUTPUT main.dvi
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
+INPUT Figure/KeywordProgrammingExample.pdf
+INPUT extractbb -B cropbox -O Figure/KeywordProgrammingExample.pdf
+INPUT Figure/NNTG.pdf
+INPUT extractbb -B cropbox -O Figure/NNTG.pdf
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmtt8.tfm
+INPUT Figure/Overview.pdf
+INPUT extractbb -B cropbox -O Figure/Overview.pdf
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/latex-fonts/lasy8.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmti8.tfm
+INPUT Figure/ACKN.pdf
+INPUT extractbb -B cropbox -O Figure/ACKN.pdf
 INPUT main.aux

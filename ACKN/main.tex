@@ -1,7 +1,7 @@
 \documentclass[PRO,english]{ipsj}
 \usepackage{PROpresentation}
-\PROheadtitle{2020-128-(x): Manuscript for presentation at IPSJ-SIGPRO, 12 3 2020.}
-\usepackage{graphicx}
+\PROheadtitle{2019-5-(2): Manuscript for presentation at IPSJ-SIGPRO, 12 3 2020.}
+\usepackage [dvipdfmx] {graphicx}
 \usepackage{latexsym}
 
 \usepackage{listings}
@@ -63,6 +63,14 @@ Information used for making recommendations can roughly be classified into two k
 % TODO: they are not exclusive, rather used in combination.
 
 Explicit intention is the information that the programmer provides to the system when he or she wants to obtain recommendation.  Examples are \emph{prefix letters}, \emph{an abbreviation}, and \emph{keywords}.  When the programmer wants to type \texttt{InputStreamReader}, he or she can type ``\texttt{Inp}'' or ``\texttt{ISR}'' to a prefix-based or abbreviation-based system, respectively, then the system will generate identifiers that start with \texttt{Inp} or that are concatenation of words starting from \texttt{I}, \texttt{S} and \texttt{R}.  These kind of recommendation systems can be found many programming editors, for example Eclipse IDE.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.38]{Figure/Eclipse.pdf}
+\caption{Eclipse code completion system}
+\label{fig:Eclipse}
+\end{figure}
+
 
 \emph{Keyword programming}, on which we are based on,  uses keywords\footnote{In keyword programmings, the term \emph{keyword} means a query word used for searching, like the one used for web search engines.  It should not be confused with keywords (or reserved words) in the syntax of programming languages.} as the explicit intention~\cite{KeywordProgramming}.  The key idea is, by letting the programmer provide a bit longer explicit intention, to enable the system can recommend longer expressions or statements.  For example, when the programmer wants to input
 \begin{quote}
@@ -139,6 +147,13 @@ The rest of the paper is organized as follows.  We first introduce how the origi
 % TODO: in introduction, define terms like "expression-level recommendation" and "identifier-level recommendation"
 \subsection{Keyword Programming}
 The keyword programming~\cite{KeywordProgramming} is an expression-level recommendation system based on keywords.  It is used when the programmer wants to write an expression (\emph{the desired expression})\footnote{The keyword programming system can recommend not only expressions but also one or multiple statements.  Here, we only explain the case for expressions for simplicity.} in a partially written program (\emph{the program context}), by typing a set of words (\emph{the keywords}) into the position where it should appear (\emph{the cursor position}).  The system then shows an ordered list of expressions (\emph{the recommendations}), one of which will be selected by the programmer and inserted into the cursor position. Below, we explain the mechanism in the four steps, namely reading keywords, extracting context information, expression generation, and ranking. 
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.38]{Figure/KeywordProgrammingExample.pdf}
+\caption{Code completion by using keyword programming}
+\label{fig:KP}
+\end{figure}
 
 % The user first inputs a keyword query in the source code. Then the system collects the information of local variables and methods from the source code and generates all possible expressions by following the syntax and typing rules. Finally, the system calculates the scores of those expressions and shows that have higher scores.
 \subsubsection{Keywords}
@@ -246,6 +261,13 @@ Finally, since the token array is also a local variable, the final score is +0.8
 \subsection{Neural network text generation}
 A neural network text generation can be accomplished in 4 steps. We demonstrate this by an example of predicting the next word given a sentence in Shakespeare's style. 
 
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.3]{Figure/NNTG.pdf}
+\caption{Using nerual network text generation to get a text in Shakespear's style}
+\label{fig:NNTG}
+\end{figure}
+
 First, the system reads the data and create the dictionary of words. The data includes all Shakespeare's works. Moreover, because neural networks can only process with numeric values, it need a way to represent word by numbers, namely word embedding. There are many ways to map words, such as one-hot embedding and word2vec. 
 
 Second, the system builds 2 lists that are used as the inputs of the neural networks. One list contains a word sequence, and the other one contains the next word. For example, the sentence \textit{"Over hill, over dale"} can create 3 pairs of data. The first sequence is \textit{over} and the next word is \textit{hill}. The second sequence is \textit{over hill} and the next word is \textit{over}. The last sequence is \textit{over hill over} and the corresponding next word is \textit{dale}. After obtaining the data, we need to map each word to a numeric value by using word embedding.
@@ -328,6 +350,13 @@ public class Read{
 
 \section{Implementation}\label{sec:implementation}
 
+\begin{figure*}[!ht]
+\centering
+\includegraphics[scale=0.42]{Figure/Overview.pdf}
+\caption{Overview of ACKN mechanism}
+\label{fig:overview}
+\end{figure*}
+
 We build an Eclipse plug-in to implement our idea. The plug-in is written in Java. We named this plug-in as ACKN, which shorts for \textbf{A}uto \textbf{C}ompletion with \textbf{K}eyword programming and \textbf{N}eural network text generation.
 
 \subsection{Search expression from all generations}
@@ -337,8 +366,8 @@ In the previous research, they used dynamic programming and A* algorithm. In ACK
 
 Beam search is a heuristic graph search algorithm. It is based on breadth first search with width constraint. To be more specific, in each depth, it first sorts the candidates by a scoring function. Then, instead of all branches, beam search cut the branches with lower score and continue to search on the remaining branches. \textit{bw} stands for the number of remaining branches for each depth.
 
-% TODO + (Figure)
-For example, suppose we want to select expressions with beam search from generations shown in Figure x. Given the keyword query is \textbf{read}, the system can calculate the score for each generation. With beam search, if the \textit{bw} is 3, then the beam search algorithm is same as breadth first search. If the \textit{bw} is 2, then the second branch of depth 2 and the third branch of depth 3 would be eliminated. In other words, the expression \texttt{} and \texttt{} would remain as the result.
+% % TODO + (Figure)
+% For example, suppose we want to select expressions with beam search from generations shown in Figure x. Given the keyword query is \textbf{read}, the system can calculate the score for each generation. With beam search, if the \textit{bw} is 3, then the beam search algorithm is same as breadth first search. If the \textit{bw} is 2, then the second branch of depth 2 and the third branch of depth 3 would be eliminated. In other words, the expression \texttt{} and \textt{} would remain as the result.
 
 \subsection{Preprocessing the training data}
 \label{subsection:Preprocessing}
@@ -376,13 +405,149 @@ Subsequently, we create a task for each by using the remaining one program. We e
 Finally, we run each task on both ACKN and the original keyword programming system. Then, compare the position where the expected expression is in each recommendation list. The recommendation list only show the first 30 results.
 
 \subsection{Result}
-Figure x shows the expected expression and corresponding keyword. 
+Table~\ref{Table1} shows the expected expression and corresponding keyword. 
 
-Figure x shows the rank of the expected expression in the result and the first result by using the original keyword programming system. Figure x shows the rank and the first result by using ACKN.
+\begin{table}[!h]
+\centering
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\begin{tabular}{|l|l|l|}
+\hline
+No.& Keyword Query& Expected Expression\\
+\hline
+1& \textbf{print result}& \textit{System.out.println(result)}\\
+\hline
+2& \textbf{print error}& \textit{System.err.println(error)}\\
+\hline
+3& \textbf{print result}&\textit{System.out.print(result)}\\
+\hline
+4& \textbf{print error}&\textit{System.err.print(error)}\\
+\hline
+5& \textbf{get time}&\textit{System.nanotime()}\\
+\hline
+6& \textbf{get time}&\textit{System.currentTimeMillis()}\\
+\hline
+7 & \textbf{str at index}&\textit{str.charAt(index)}\\
+\hline
+8 & \textbf{upcase str}&\textit{str.toUpperCase()}\\
+\hline
+9 & \textbf{lower str}&\textit{str.toLowerCase()}\\
+\hline
+10 & \textbf{str from begin to end}&\textit{str.substring(begin, end)}\\
+\hline
+11 & \textbf{limit capacity to min}&\textit{sb.ensureCapacity(min)}\\
+\hline
+12 & \textbf{get address of host}&\textit{InetAddress.getLocalHost()}\\
+\hline
+13 & \textbf{input}&\textit{new Scanner(System.in)}\\
+\hline
+14 & \textbf{read standard in}&\tabincell{l}{\textit{new BufferedReader(new }\\ \textit{    InputStreamReader(System.in))}}\\
+\hline
+15 & \textbf{load resource name}& \tabincell{l}{\textit{Thread.currentThread()}\\\textit{    .getContextClassLoader()}\\\textit{    .getResource(name)}}\\
+\hline
+\end{tabular}
+\caption{keywords and expected expressions of 15 tasks}
+\label{Table1}
+\end{table}
+
+Table~\ref{Table2} shows the position of the expected expression in the result and the first result by using the original keyword programming system. Table~\ref{Table3} shows the position and the first result by using ACKN. ``$\times$'' stands for the top-30 results do not contain the expected expression.
+
+
+\begin{table}
+\centering
+\scalebox{0.9}{
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\begin{tabular}{l|l|l}
+\hline
+Task& Position &Top expressions\\
+\hline
+1& $\times$ & \textit{System.err.print(result)}\\
+\hline
+2& $\times$ & \textit{new PrintStream(error)}\\
+\hline
+3& 2nd & \textit{System.err.print(result)}\\
+\hline
+4& 3rd & \textit{new PrintStream(error)}\\
+\hline
+5& 2nd & \textit{System.getProperties()}\\
+\hline
+6& 4th & \textit{System.getProperties()}\\
+\hline
+7& 1st & \textit{str.charAt(index)}\\
+\hline
+8& 10th & \textit{str}\\
+\hline
+9& 1st & \textit{str.toLowerCase()}\\
+\hline
+10& 4th  & \textit{str.substring(end, begin).toString( )}\\
+\hline
+11& $\times$ & \textit{sb.append(min).insert(sb.capacity(),sb.toString())}\\
+\hline
+12& 2nd  & \textit{local.getHostAddress()}\\
+\hline
+13& 24th & \textit{new Main().readInputUntilEndOfLine()}\\
+\hline
+14& 29th & \textit{new InputStreamReader(System.in).read()}\\
+\hline
+15&$\times$  & \tabincell{l}{\textit{ClassLoader.getSystemClassLoader()}\\ \textit{    .loadClass(ClassLoader} \\ \textit{    .getSystemResource(name).getRef())}}\\
+\hline
+\end{tabular}}
+\caption{position and top result by using the original keyword programming}
+\label{Table2}
+\end{table}
+
+\begin{table}
+\centering
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\scalebox{0.9}{
+\begin{tabular}{l|l|l}
+\hline
+Task& Position &Top expressions\\
+\hline
+1& 5th & \textit{System.err.print(result)}\\
+\hline
+2& $\times$ & \textit{new PrintStream(error).println()}\\
+\hline
+3& 2nd & \textit{System.err.print(result)}\\
+\hline
+4& $\times$ & \textit{new PrintStream(error)}\\
+\hline
+5& 1st & \textit{System.nanoTime()}\\
+\hline
+6& 1st & \textit{System.currentTimeMillis()}\\
+\hline
+7& 1st & \textit{str.charAt(index)}\\
+\hline
+8& 9th & \textit{str}\\
+\hline
+9& 1st & \textit{str.toLowerCase()}\\
+\hline
+10& $\times$  & \textit{str.substring(end, begin).toString( )}\\
+\hline
+11& 30th & \textit{sb.append(min).insert(sb.capacity(),sb.toString())}\\
+\hline
+12& 25th  & \textit{new Main().getLocalHost().isMulticastAddress()}\\
+\hline
+13& 22th & \textit{new Main().readInputUntilEndOfLine()}\\
+\hline
+14& $\times$ & \textit{new InputStreamReader(System.in,input.readLine())}\\
+\hline
+15&$\times$  & \tabincell{l}{\textit{ClassLoader.getSystemClassLoader()}\\ \textit{    .loadClass(ClassLoader} \\ \textit{    .getSystemResource(name).getRef())}}\\
+\hline
+\end{tabular}}
+\caption{position and top result by using the AKCN}
+\label{Table3}
+\end{table}
 
 % \subsection{Discussion}
 
-By using the existing keyword programming,11 tasks can show the expected expression on the list and the expected expression are in the top-5 results in 8 tasks. In contrast, by using ACKN, 10 tasks can show on the recommendation list, and 5 tasks are in the top-5 results.
+By using the existing keyword programming,11 tasks can show the expected expression on the list and the expected expression are in the top-5 results in 8 tasks. In contrast, by using ACKN, 10 tasks can show on the recommendation list, and 6 tasks are in the top-5 results.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.23]{Figure/ACKN.pdf}
+\caption{Code completion by using ACKN}
+\label{fig:ACKN}
+\end{figure}
 
 \section{Future Work}
 
