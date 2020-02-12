@@ -157,6 +157,8 @@ OUTPUT main.dvi
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
 INPUT Figure/KeywordProgrammingExample.pdf
 INPUT extractbb -B cropbox -O Figure/KeywordProgrammingExample.pdf
+INPUT Figure/BeamSearch.pdf
+INPUT extractbb -B cropbox -O Figure/BeamSearch.pdf
 INPUT Figure/NNTG.pdf
 INPUT extractbb -B cropbox -O Figure/NNTG.pdf
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty

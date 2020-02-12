@@ -101,12 +101,12 @@ For example, TabNine~\cite{deep-tabnine2019} and Bruch et al.'s work~\cite{bruch
 % https://tabnine.com/blog/deep/
 
 % @Misc{deep-tabnine2019,
-%   author = 	 {{TabNine, Inc.}},
-%   title = 	 {Autocompletion with deep learning},
+%   author =     {{TabNine, Inc.}},
+%   title =      {Autocompletion with deep learning},
 %   howpublished = {https://tabnine.com/blog/deep/},
-%   month = 	 {July 15},
-%   year = 	 2019,
-%   note = 	 {Accessed February 11, 2020.}}
+%   month =      {July 15},
+%   year =   2019,
+%   note =   {Accessed February 11, 2020.}}
 
 % GPT-2
 % @article{radford2019language,
@@ -131,7 +131,7 @@ Those system exploit corpora by using statistical methods in order to cope with 
 
 % Moreover, a long short term model(LSTM)~\cite{LSTM} is an optimized RNN designed for learning the long term dependency. In contrast to the standard RNN, LSTM has a better performance to learn from more complicated data.
 
-This paper proposes a method of improving the keyword programming by exploiting program corpus knowledge.  With the support from a neural network based sentence generator, it tries to recommend expressions not just containing the programmer provided keywords, but those more likely appear in the corpus.  By dosing so, we aim at making the keyword programming usable for larger expressions.  
+This paper proposes a method of improving the keyword programming by exploiting program corpus knowledge.  With the support from a neural network based sentence generator, it tries to recommend expressions not just containing the programmer provided keywords, but those more likely appear in the corpus.  By doing so, we aim at making the keyword programming usable for larger expressions.  
 
 The rest of the paper is organized as follows.  We first introduce how the original keyword programming recommends expressions based on the generate-and-ranking method.  We also overview what a neural network can generate sentences with a corpus (\secref{sec:background}).  We then illustrate that the original keyword programming works poorly for recommending larger expressions (\secref{sec:problem}).  We present our proposal, which lets the keyword programming recommend expressions that more likely appear in the corpus, based on the probabilities from the sentence generator (\secref{sec:proposal}).  We implemented the proposal as an Eclipse plug-in called ACKN (\secref{sec:implementation}) and evaluated the proposal by performing an experiment of inserting 15 expressions with the original and proposed keyword programming (\secref{sec:evaluation}). 
 
@@ -222,9 +222,9 @@ The system then generates all valid expressions and passes them to the next rank
 \label{subsubsection:Ranking}
 
 The system calculates scores of the generated expressions in order to show top $N$ recommendations.  The scoring function prefers expressions that are more concise and have more keywords.  The function is defined in this formula:
-$$
-  - 0.05 N + 1.0 K  -0.01 D + 0.001 L
-$$
+\begin{equation}
+  - 0.05 N + 1.0 K  -0.01 D + 0.001 L \label{eq:scoring}
+\end{equation}
 where
 \begin{description}
 \item[$N$] is the nesting level of the expression (i.e., the height of its abstract syntax tree representation),
@@ -246,20 +246,40 @@ Here, a token is a component of an identifier split by the ``camel case.''  For 
 
 % Token is obtained by splitting an expression with punctuation and upper case letter. For example, the expression \texttt{str.toUpperCase()} has 4 tokens, which are \texttt{str}, \texttt{to}, \texttt{upper} and \texttt{case}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO from here
+For example, the score of \texttt{array.add()} (where \texttt{array} is a local variable) with respect to the keywords \texttt{add} and \texttt{line} is calculated in this way.  The above four parameters are determined as follows:
+\begin{itemize}
+\item $N=2$
+\item $K=1$ (for \texttt{add})
+\item $D=1$ (for \texttt{array}), and
+\item $L=1$ (for \texttt{array}).
+\end{itemize}
+Thus, the score is 
+$$
+  - 0.05 \cdot 2 + 1.0 \cdot 1  -0.01 \cdot 1 + 0.001 \cdot 1 = 0.891.
+$$
 
-We demonstrate the rule by an example of calculating the score for a function \texttt{array.add()} given the keyword \textbf{add} and \textbf{line}.
+\subsubsection{Beam search}
+It is a search problem to select expressions with the highest score among all possible generations. In the previous research, they used dynamic programming to generate one result by finding the local optimal solution and \emph{A*} (acturally \emph{beam search}) to get multiple generations.
 
-First, since the height of \texttt{array.add()} is two, the initial score is -0.1.
+Beam search is a heuristic graph search algorithm. It is based on breadth first search with width constraint. In each depth, it first sorts the candidates by a scoring function. Then remove the node with lower score and continue to search on the remaining node. \emph{bw}, short for beam width, denotes the number of remaining nodes for each depth.
 
-Then, since the token \texttt{array} is not in the keyword query, the score becomes -0.11.
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.23]{Figure/BeamSearch.pdf}
+\caption{Beam search in expression generation}
+\label{fig:BeamSearch}
+\end{figure}
 
-Because the token \texttt{add} is in the keyword query, the score becomes +0.89.
+For example, in Fig~\ref{fig:BeamSearch}, suppose the keywords are ``\textbf{print out result}'', and the expressions in the third black block stand for all possible expressions that the depth of AST is under 3. If the user sets the \emph{bw} to be 2, then the system only remain two expressions before generate a deeper one. The remaining expressions are shown in the red block.
 
-Finally, since the token array is also a local variable, the final score is +0.891.
 
 \subsection{Neural network text generation}
-A neural network text generation can be accomplished in 4 steps. We demonstrate this by an example of predicting the next word given a sentence in Shakespeare's style. 
+
+Our proposal in this paper uses a neural network text generation technique for improving the keyword programming.  Since we use the technique by merely retargeting the domain from natural language sentences to programs, we simple overview of its functionality here.
+
+Neural network text generation is a technique, which is originally developed in the domain of natural language processing, that can train a neural network by using a large corpus of text, so that it will generate, given an input sequence of words, a sequence of words that likely to follow the input sequence.  
+
+%  can be accomplished in 4 steps. We demonstrate this by an example of predicting the next word given a sentence in Shakespeare's style. 
 
 \begin{figure}[!ht]
 \centering
@@ -268,36 +288,78 @@ A neural network text generation can be accomplished in 4 steps. We demonstrate 
 \label{fig:NNTG}
 \end{figure}
 
-First, the system reads the data and create the dictionary of words. The data includes all Shakespeare's works. Moreover, because neural networks can only process with numeric values, it need a way to represent word by numbers, namely word embedding. 
+\figref{fig:NNTG} illustrates the three main operations in neural network text generation, namely \emph{word embedding,} \emph{training}, and \emph{predicting}.
 
-Word2vec is one way to implement word embedding. There are two benifits for using word2vec. In contrast to traditional embedding approach, word2vec can represent a word in a lower dimension. Thus, it requires less memory to store the data and it is faster to train the neural networks model with those data. Moreover, word2vec can detemine the similarity between two word vectors using the cosine distance. It usually used to find synonyms in the natural language processing.  
+\emph{Word embedding} operation converts between a word in the text and a numerical vector that is used as input and output of the generator network.  Among many embedding techniques, we use an embedding method called \emph{Word2Vec}~\cite{word2vec}, which can naturally embed semantic similarity into the vector representation.  Note that Word2Vec is based on neural network technology, we need to train another network by using a corpus.
+Though there are also more sophisticated and domain specific embedding methods (for example embedding nodes in a tree structure~\cite{ASTToken2Vec}), we do not consider in this paper.  
+
+\emph{Training} a neural network is to adjust parameters in the network by providing training data set from the corpus.  A training data for text generation is a sequence of words appear in the corpus as an input, and a word that appear just after the sequence as an expected output.  For example, when there is a phrase ``Over hill, over dale'' in the corpus, there will be three training data, namely
+$\langle[\mbox{``\texttt{over}''}], \mbox{``\texttt{hill}''}\rangle$, 
+$\langle[\mbox{``\texttt{over}''}, \mbox{``\texttt{hill}''}], \mbox{``\texttt{over}''}\rangle$,  and
+$\langle[\mbox{``\texttt{over}''}, \mbox{``\texttt{hill}''},\mbox{``\texttt{over}''}], \mbox{``\texttt{dale}''}\rangle$.
+
+In our work, we use the LSTM (long short-term memory) network~\cite{LSTM} for text generation.  LSTM is one of the recurrent neural network (RNN) models.  RNN is one of the network models for handling inputs in a form of a sequence by retaining a state inside of the network.  LSTM is developed for handling sequences that have structures (such as natural language grammars and phrase structures) by separately maintaining the states affected by immediately preceding words and by distantly preceding words.
+
+% Second, the system builds 2 lists that are used as the inputs of the neural networks. One list contains a word sequence, and the other one contains the next word. For example, the sentence \textit{"Over hill, over dale"} can create 3 pairs of data. The first sequence is \textit{over} and the next word is \textit{hill}. The second sequence is \textit{over hill} and the next word is \textit{over}. The last sequence is \textit{over hill over} and the corresponding next word is \textit{dale}. After obtaining the data, we need to map each word to a numeric value by using word embedding.
+
+% Third, input the data and train the neural networks with it. 
+
+The trained network can \emph{predict} the next word for a given input sequence of words.  Precisely, the output of the network is probability distribution of multiple words.  We can therefore determine the word with the highest probability, or a ranked list of words with higher probabilities.
+
+The network can also be used for predicting a sequence of words followed by the input sequence by providing the next predicted word as the next input word.
+
+% Finally, predict the probability of the next word given a word sequence. For example, given a sentence \textit{ake thee of} then the word \textit{thy} would have the highest probability to be the next word calculated by the neural networks model.
+
+% Moreover, if the user wants to generate a sentence, they need to iterate the last procedure after append the word with the highest probability to the end of the previous word sequence. To be more specific, the probability of the next word is calculated by the neural model given the word sequence \textit{ake thee of thy}.
 
 
-Second, the system builds 2 lists that are used as the inputs of the neural networks. One list contains a word sequence, and the other one contains the next word. For example, the sentence \textit{"Over hill, over dale"} can create 3 pairs of data. The first sequence is \textit{over} and the next word is \textit{hill}. The second sequence is \textit{over hill} and the next word is \textit{over}. The last sequence is \textit{over hill over} and the corresponding next word is \textit{dale}. After obtaining the data, we need to map each word to a numeric value by using word embedding.
+\section{Problems}\label{sec:problem}
 
-Third, input the data and train the neural networks with it. 
+The original keyword programming does not always work well.  We here point out two problematic cases, namely preference of shorter expressions and ignorance of context, and discuss the causes of the problems.
 
-Finally, predict the probability of the next word given a word sequence. For example, given a sentence \textit{ake thee of} then the word \textit{thy} would have the highest probability to be the next word calculated by the neural networks model.
+\subsection{Preference of shorter expressions}
+Though it is difficult to evaluate the effectiveness of this kind of recommendation systems, the original paper~\cite{KeywordProgramming} reported that the accuracy drops when the desired expressions get larger, even with an experiment with artificially prepared keywords.  We also confirmed that the quality of recommendation degrades when we tried to input a larger expressions with our re-implementation of the original keyword programming system.
 
-Moreover, if the user wants to generate a sentence, they need to iterate the last procedure after append the word with the highest probability to the end of the previous word sequence. To be more specific, the probability of the next word is calculated by the neural model given the word sequence \textit{ake thee of thy}.
+% Although keyword programming can help a user to complete the program conveniently, there is still a problem that the expected expression, especially a complicated one, is not able to be shown as the first candidate.
+
+We can understand the cause of the problem from the scoring function (\ref{eq:scoring}) as it gives a penalty every token that does not match any keyword.  It therefore ranks shorter expressions higher, if containing the same number of keywords.  
+
+We believe that this preference can be more problematic in a practical situation, for example when the programmer wants to input a long idiomatic expression.  Let us see the problem by an example when we want to input the following expression that frequently appear in many programs that reads the standard input on a per-line basis.
+\begin{quote}
+  \texttt{new BufferedReader(\\
+    \qquad new InputStreamReader(System.in))}
+\end{quote}
+Assume we provided \texttt{reader} and \texttt{in} as the keywords.  Then the system ranks this expression lower with score of $1.74$ than its sub-expression:
+\begin{quote}
+  \texttt{new InputStreamReader(System.in)}
+\end{quote}
+with score of $1.81$ because the latter has a fewer number of tokens in total.  By considering the fact that the latter expression alone is used less frequently, it is not ideal.  
+
+%For example, if a user wants to read the standard input information from console, in Java, most of users would write the expression \texttt{new BufferedReader(new InputStreamReader(System.in))}. 
+
+% When the programmer uses keyword programming to get this expression, after the user types the keywords \textbf{reader in} and triggers the system, the first candidate would be \texttt{new InputStreamReader(System.in)}, and the 12th candidate is the expected expression \texttt{new BufferedReader(new InputStreamReader(System.in))}. 
 
 
-\section{Problem}\label{sec:problem}
-Although keyword programming can help a user to complete the program conveniently, there is still a problem that the expected expression, especially a complicated one, is not able to be shown as the first candidate.
 
-For example, if a user wants to read the standard input information from console, in Java, most of users would write the expression \texttt{new BufferedReader(new InputStreamReader(System.in))}. 
+%In the previous research, an expression is 90\% to be shown on the top of the recommendation list if the keywords use as same tokens as in the expression. For example, given a keyword query \textbf{new buffered reader new input stream reader system in}, the expression \texttt{new BufferedReader(new InputStreamReader(System.in))} would be the first candidate.
 
-When the programmer uses keyword programming to get this expression, after the user types the keywords \textbf{reader in} and triggers the system, the first candidate would be \texttt{new InputStreamReader(System.in)}, and the 12th candidate is the expected expression \texttt{new BufferedReader(new InputStreamReader(System.in))}. 
+%However, like other code recommendation technique, keyword programming aims to shorten programming time. Thus, it would be meaningless if the user types all tokens in the expected expression. Alternatively, a keyword programming user would be more likely to choose relatively fewer substrings in the expected expression as the keyword query such as \textbf{reader in}. 
 
+%By using the scoring function in the section~\ref{subsubsection:Ranking}, the score of the expression \texttt{new InputStreamReader(System.in)} would be +1.81. On the other hand, the score of the expression \texttt{new BufferedReader(new InputStreamReader}\\\texttt{(System.in))} would be +1.74. Therefore, the former expression is in a higher position in the recommendation list.
 
+%The reason is that an expression has a higher score calculated by the scoring function when it is shorter and contains more keywords. Therefore, when the expected expression becomes more complicated and the number of keywords is relatively fewer, it is hard to be shown in a higher position in the recommendation list. In this paper, complicate denotes that the expression has a larger abstract syntax tree or contains many tokens. For instance, the height of \texttt{new BufferedReader(new InputStreamReader(System.in))} is 4, and it contains 9 tokens from \texttt{new} to \texttt{in}.
 
-In the previous research, an expression is 90\% to be shown on the top of the recommendation list if the keywords use as same tokens as in the expression. For example, given a keyword query \textbf{new buffered reader new input stream reader system in}, the expression \texttt{new BufferedReader(new InputStreamReader(System.in))} would be the first candidate.
+\subsection{Ignorance of context}
 
-However, like other code recommendation technique, keyword programming aims to shorten programming time. Thus, it would be meaningless if the user types all tokens in the expected expression. Alternatively, a keyword programming user would be more likely to choose relatively fewer substrings in the expected expression as the keyword query such as \textbf{reader in}. 
+Even if we had improved the system to give higher scores to more frequently used expressions, another problem would remain: ignorance of context.  Assume we already typed in \texttt{new BufferedReader()}, and provided \texttt{reader} and \texttt{in} as the keywords in order insert \texttt{new InputStreamReader(System.in)} as the parameter position.  Since the original algorithm calculates the scores regardless the cursor position, it would then give higher score for the expression \texttt{new BufferedReader(new InputStream$\ldots$)} as the parameter of \texttt{new BufferedReader( )}.
 
-By using the scoring function in the section~\ref{subsubsection:Ranking}, the score of the expression \texttt{new InputStreamReader(System.in)} would be +1.81. On the other hand, the score of the expression \texttt{new BufferedReader(new InputStreamReader}\\\texttt{(System.in))} would be +1.74. Therefore, the former expression is in a higher position in the recommendation list.
+\subsection{Summary of the problems}
 
-The reason is that an expression has a higher score calculated by the scoring function when it is shorter and contains more keywords. Therefore, when the expected expression becomes more complicated and the number of keywords is relatively fewer, it is hard to be shown in a higher position in the recommendation list. In this paper, complicate denotes that the expression has a larger abstract syntax tree or contains many tokens. For instance, the height of \texttt{new BufferedReader(new InputStreamReader(System.in))} is 4, and it contains 9 tokens from \texttt{new} to \texttt{in}.
+To summarize, we would like to improve the original keyword programming on the following two respects.
+\begin{itemize}
+\item It generally gives lower ranks to larger expressions.  However, it also should rank frequently appearing expressions higher even if they are large.  % For example, \texttt{new BufferedReader(new InputStreamReader(System.in))} should have a higher rank over \texttt{new InputStreamReader(System.in)}.
+\item It gives the same ranking regardless the context.  However, it should rank expressions higher if the expressions frequently appear in the context at the cursor position.
+\end{itemize}
 
 \section{Proposal: Using a NN text generator}\label{sec:proposal}
 Our proposal is to use a neural network text generator to recommend more context-dependent expressions.
@@ -363,14 +425,12 @@ public class Read{
 We build an Eclipse plug-in to implement our idea. The plug-in is written in Java. We named this plug-in as ACKN, which shorts for \textbf{A}uto \textbf{C}ompletion with \textbf{K}eyword programming and \textbf{N}eural network text generation.
 
 \subsection{Search expression from all generations}
-It is a search problem to select partial expressions to show on the recommendation list from all possible generations. Although a static programming language like Java has type constraints that can limit the size of generations, it is still unpossible to show all available candidates.
+In our proposal, we also use beam search in expression
+generation. However, we change the standard of the limitation. 
 
-In the previous research, they used dynamic programming and A* algorithm. In ACKN, we use another greedy algorithm called beam search.
+Except for remaining the expressions with higher scores, the system also remaining the expressions with larger probability. We define \emph{pn} as the number of the remaining expressions compared by the probability. 
 
-Beam search is a heuristic graph search algorithm. It is based on breadth first search with width constraint. To be more specific, in each depth, it first sorts the candidates by a scoring function. Then, instead of all branches, beam search cut the branches with lower score and continue to search on the remaining branches. \textit{bw} stands for the number of remaining branches for each depth.
-
-% % TODO + (Figure)
-% For example, suppose we want to select expressions with beam search from generations shown in Figure x. Given the keyword query is \textbf{read}, the system can calculate the score for each generation. With beam search, if the \textit{bw} is 3, then the beam search algorithm is same as breadth first search. If the \textit{bw} is 2, then the second branch of depth 2 and the third branch of depth 3 would be eliminated. In other words, the expression \texttt{} and \textt{} would remain as the result.
+To the generations in a certain depth, we first sort these by the original scoring function and remain $\emph{bw} - \emph{pn}$ expressions. Then sort other expressions with the new scoring function we introduced in the section~\ref{sec:proposal} and remain \emph{pn} expressions with a higher score.
 
 \subsection{Preprocessing the training data}
 \label{subsection:Preprocessing}
@@ -397,9 +457,9 @@ Subsequently, we create a task for each by using the remaining one program. We e
 Finally, we run each task on both ACKN and the original keyword programming system. Then, compare the position where the expected expression is in each recommendation list. The recommendation list only show the first 30 results.
 
 \subsection{Result}
-Table~\ref{Table1} shows the expected expression and corresponding keyword. 
+Table~\ref{Table1} shows the expected expression and corresponding keyword. The first six expressions using methods or fields related to \textit{System} class. From 7th to 10th are common expressions to process a string. The 11th and 12th are only used in a special task. The 13th and 14th are the expressions that can read a standard input from console. The last expressions has a larger abstract syntax tree.
 
-\begin{table}[!h]
+\begin{table}[!ht]
 \centering
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
 \begin{tabular}{|l|l|l|}
@@ -444,7 +504,7 @@ No.& Keyword Query& Expected Expression\\
 Table~\ref{Table2} shows the position of the expected expression in the result and the first result by using the original keyword programming system. Table~\ref{Table3} shows the position and the first result by using ACKN. ``$\times$'' stands for the top-30 results do not contain the expected expression.
 
 
-\begin{table}
+\begin{table}[!ht]
 \centering
 \scalebox{0.9}{
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
@@ -487,7 +547,7 @@ Task& Position &Top expressions\\
 \label{Table2}
 \end{table}
 
-\begin{table}
+\begin{table}[!ht]
 \centering
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
 \scalebox{0.9}{
@@ -532,7 +592,7 @@ Task& Position &Top expressions\\
 
 % \subsection{Discussion}
 
-By using the existing keyword programming,11 tasks can show the expected expression on the list and the expected expression are in the top-5 results in 8 tasks. In contrast, by using ACKN, 10 tasks can show on the recommendation list, and 6 tasks are in the top-5 results.
+By using the existing keyword programming,11 tasks can show the expected expression on the list and the expected expression are in the Top-5 results in 8 tasks. In contrast, by using ACKN, 10 tasks can show on the recommendation list, and 6 tasks are in the Top-5 results.
 
 \begin{figure}[!ht]
 \centering
@@ -568,6 +628,8 @@ Although we use nearly 5000 program as our training data, it is still not enough
 % NLP2Code : 
 
 \section{Conclusion}
+
+In this paper, we propose a code recommendation system based on context-aware keyword programming. We exploit corpora by using an LSTM token generator to predict the probability of the next token and make the keyword programming recommend expressions regarding the probability. We built a Eclipse plug-in and name it ACKN to implement our idea. We evaluated our proposal by comparing the accuracy and precision of inserting 15 expressions. 
 
 
 \bibliographystyle{unsrt}
