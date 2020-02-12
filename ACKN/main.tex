@@ -123,8 +123,6 @@ Those system exploit corpora by using statistical methods in order to cope with 
 
 % Moreover, a long short term model(LSTM)~\cite{LSTM} is an optimized RNN designed for learning the long term dependency. In contrast to the standard RNN, LSTM has a better performance to learn from more complicated data.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO: from here
-
 This paper proposes a method of improving the keyword programming by exploiting program corpus knowledge.  With the support from a neural network based sentence generator, it tries to recommend expressions not just containing the programmer provided keywords, but those more likely appear in the corpus.  By dosing so, we aim at making the keyword programming usable for larger expressions.  
 
 The rest of the paper is organized as follows.  We first introduce how the original keyword programming recommends expressions based on the generate-and-ranking method.  We also overview what a neural network can generate sentences with a corpus (\secref{sec:background}).  We then illustrate that the original keyword programming works poorly for recommending larger expressions (\secref{sec:problem}).  We present our proposal, which lets the keyword programming recommend expressions that more likely appear in the corpus, based on the probabilities from the sentence generator (\secref{sec:proposal}).  We implemented the proposal as an Eclipse plug-in called ACKN (\secref{sec:implementation}) and evaluated the proposal by performing an experiment of inserting 15 expressions with the original and proposed keyword programming (\secref{sec:evaluation}). 
@@ -205,22 +203,35 @@ The system then generates all valid expressions and passes them to the next rank
 
 % However, an expression like \texttt{System.out.print(result)} would lead to a compile error, because it is not able to refer the variable \texttt{result} in the line 10. Another method invocation such as \texttt{result.print()} is also forbidden since it does not follow the type rules.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO from here
-
 \subsubsection{Ranking}
 \label{subsubsection:Ranking}
 
-The code completion system of Eclipse organizes the recommendation alphabetically. For example, the method \texttt{add} shows in front of the method \texttt{concat} on the recommendation list.
+The system calculates scores of the generated expressions in order to show top $N$ recommendations.  The scoring function prefers expressions that are more concise and have more keywords.  The function is defined in this formula:
+$$
+  - 0.05 N + 1.0 K  -0.01 D + 0.001 L
+$$
+where
+\begin{description}
+\item[$N$] is the nesting level of the expression (i.e., the height of its abstract syntax tree representation),
+\item[$K$] is the number of keywords that match tokens in the expression,
+\item[$D$] is the number of tokens in the expression that do not match any keyword, and
+\item[$L$] is the number of tokens that reference local variables or method names.
+\end{description}
+Here, a token is a component of an identifier split by the ``camel case.''  For example, the method name \texttt{getName} consists of the two tokens namely \texttt{get} and \texttt{name}; hence the keyword \texttt{name} is considered as appeared therein.
 
-In contrast, a keyword programming system shows the recommendations in the order of scores calculated by rules that:
-\begin{itemize}
-\item -0.05 for each height of abstract syntax tree,
-\item +1.0 if the expression contains a token inside the keyword query,
-\item -0.01 if the token is not in the keyword query, and
-\item +0.001, when the element is a local variable or a member method.
-\end{itemize}
+% The code completion system of Eclipse organizes the recommendation alphabetically. For example, the method \texttt{add} shows in front of the method \texttt{concat} on the recommendation list.
 
-Token is obtained by splitting an expression with punctuation and upper case letter. For example, the expression \texttt{str.toUpperCase()} has 4 tokens, which are \texttt{str}, \texttt{to}, \texttt{upper} and \texttt{case}.
+%In contrast, a keyword programming system shows the recommendations in the order of scores calculated by rules that:
+% \begin{itemize}
+% \item -0.05 for each height of abstract syntax tree,
+% \item +1.0 if the expression contains a token inside the keyword query,
+% \item -0.01 if the token is not in the keyword query, and
+% \item +0.001, when the element is a local variable or a member method.
+% \end{itemize}
+
+% Token is obtained by splitting an expression with punctuation and upper case letter. For example, the expression \texttt{str.toUpperCase()} has 4 tokens, which are \texttt{str}, \texttt{to}, \texttt{upper} and \texttt{case}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TODO from here
 
 We demonstrate the rule by an example of calculating the score for a function \texttt{array.add()} given the keyword \textbf{add} and \textbf{line}.
 
