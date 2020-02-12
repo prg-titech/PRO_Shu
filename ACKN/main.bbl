@@ -1,0 +1,45 @@
+\begin{thebibliography}{1}
+
+\bibitem{little2009keyword}
+Greg Little and Robert~C Miller.
+\newblock Keyword programming in java.
+\newblock {\em Automated Software Engineering}, 16(1):37, 2009.
+
+\bibitem{robbes2008program}
+Romain Robbes and Michele Lanza.
+\newblock How program history can improve code completion.
+\newblock In {\em 2008 23rd IEEE/ACM International Conference on Automated
+  Software Engineering}, pages 317--326. IEEE, 2008.
+
+\bibitem{han2009code}
+Sangmok Han, David~R Wallace, and Robert~C Miller.
+\newblock Code completion from abbreviated input.
+\newblock In {\em 2009 IEEE/ACM International Conference on Automated Software
+  Engineering}, pages 332--343. IEEE, 2009.
+
+\bibitem{deep-tabnine2019}
+{TabNine, Inc.}
+\newblock Autocompletion with deep learning.
+\newblock https://tabnine.com/blog/deep/, July 15 2019.
+\newblock Accessed February 11, 2020.
+
+\bibitem{bruch2009learning}
+Marcel Bruch, Martin Monperrus, and Mira Mezini.
+\newblock Learning from examples to improve code completion systems.
+\newblock In {\em Proceedings of the 7th joint meeting of the European software
+  engineering conference and the ACM SIGSOFT symposium on the foundations of
+  software engineering}, pages 213--222, 2009.
+
+\bibitem{radford2019language}
+Alec Radford, Jeffrey Wu, Rewon Child, David Luan, Dario Amodei, and Ilya
+  Sutskever.
+\newblock Language models are unsupervised multitask learners.
+\newblock {\em OpenAI Blog}, 1(8):9, 2019.
+
+\bibitem{allamanis2015suggesting}
+Miltiadis Allamanis, Earl~T Barr, Christian Bird, and Charles Sutton.
+\newblock Suggesting accurate method and class names.
+\newblock In {\em Proceedings of the 2015 10th Joint Meeting on Foundations of
+  Software Engineering}, pages 38--49, 2015.
+
+\end{thebibliography}

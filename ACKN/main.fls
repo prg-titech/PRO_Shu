@@ -171,4 +171,6 @@ INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/latex-fonts/lasy8.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmti8.tfm
 INPUT Figure/ACKN.pdf
 INPUT extractbb -B cropbox -O Figure/ACKN.pdf
+INPUT main.bbl
+INPUT main.bbl
 INPUT main.aux

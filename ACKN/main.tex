@@ -72,7 +72,7 @@ Explicit intention is the information that the programmer provides to the system
 \end{figure}
 
 
-\emph{Keyword programming}, on which we are based on,  uses keywords\footnote{In keyword programmings, the term \emph{keyword} means a query word used for searching, like the one used for web search engines.  It should not be confused with keywords (or reserved words) in the syntax of programming languages.} as the explicit intention~\cite{KeywordProgramming}.  The key idea is, by letting the programmer provide a bit longer explicit intention, to enable the system can recommend longer expressions or statements.  For example, when the programmer wants to input
+\emph{Keyword programming}, on which we are based on,  uses keywords\footnote{In keyword programmings, the term \emph{keyword} means a query word used for searching, like the one used for web search engines.  It should not be confused with keywords (or reserved words) in the syntax of programming languages.} as the explicit intention~\cite{little2009keyword}.  The key idea is, by letting the programmer provide a bit longer explicit intention, to enable the system can recommend longer expressions or statements.  For example, when the programmer wants to input
 \begin{quote}
   \texttt{new BufferedReader(\\
     \qquad{}new InputStreamReader(System.in))},   
@@ -81,10 +81,10 @@ he or she can type ``\texttt{buffered reader in}'' so that the system will recom
 
 Implicit context is the information available in the code and the past behaviors of the programmer.  For example, the recommendation system in Eclipse uses the type information of the expressions around the cursor position, and recommends identifiers (class, variable or method  names) that can form an expression with a matching type.
 
-Implicit context can improve the quality of recommendations.  For example, Robbes et al.\  discovered that the type information and code structure are useful to greatly improve a prefix-based recommendation system~\cite{ProgramHistory}.
+Implicit context can improve the quality of recommendations.  For example, Robbes et al.\  discovered that the type information and code structure are useful to greatly improve a prefix-based recommendation system~\cite{robbes2008program}.
 % Romain Robbes et al.~\cite{ProgramHistory} propose a code recommendation system that also inputs a few characters, but the recommendations are sorted according to the user’s programming history.
 
-Han et al.\ proposed a method to improve an abbreviation-based recommendation system by using a hidden Markov model (HMM)~\cite{Sangmok}.  They construct a HMM of a program corpus, and use it for recommending expressions that are more likely to appear in the corpus.
+Han et al.\ proposed a method to improve an abbreviation-based recommendation system by using a hidden Markov model (HMM)~\cite{han2009code}.  They construct a HMM of a program corpus, and use it for recommending expressions that are more likely to appear in the corpus.
 
 % I DON'T KNOW how Hu et al.'s work can be positioned yet.  %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -96,7 +96,7 @@ Han et al.\ proposed a method to improve an abbreviation-based recommendation sy
 % In contrast, implicit information denotes information that can be exploited from the context. These kinds of systems can be categorized by different statistical models.
 
 Many recommendation systems use implicit context information in combination with knowledge from a corpus.  In other words, those systems recommend expressions/identifiers that ``programmers who wrote these also wrote.'' 
-For example, TabNine~\cite{TabNine} and Bruch et al.'s work~\cite{Marcel} extract a sequence of tokens or a sequence of method calls before the cursor position in the editor, and recommend expressions or identifiers that frequently appear in the expressions that share the same sequence in the corpus.  %  takes the whole context into consideration arranges the recommendations by their probabilities. The previous system calculates probabilities by a GPT-2 model and Marcel Bruch et al. utilize an algorithm named Best Matching Neighbors(BMN) based on the K-Nearest Neighbors algorithm. 
+For example, TabNine~\cite{deep-tabnine2019} and Bruch et al.'s work~\cite{bruch2009learning} extract a sequence of tokens or a sequence of method calls before the cursor position in the editor, and recommend expressions or identifiers that frequently appear in the expressions that share the same sequence in the corpus.  %  takes the whole context into consideration arranges the recommendations by their probabilities. The previous system calculates probabilities by a GPT-2 model and Marcel Bruch et al. utilize an algorithm named Best Matching Neighbors(BMN) based on the K-Nearest Neighbors algorithm. 
 
 % https://tabnine.com/blog/deep/
 
@@ -146,7 +146,7 @@ The rest of the paper is organized as follows.  We first introduce how the origi
 \section{Background}\label{sec:background}
 % TODO: in introduction, define terms like "expression-level recommendation" and "identifier-level recommendation"
 \subsection{Keyword Programming}
-The keyword programming~\cite{KeywordProgramming} is an expression-level recommendation system based on keywords.  It is used when the programmer wants to write an expression (\emph{the desired expression})\footnote{The keyword programming system can recommend not only expressions but also one or multiple statements.  Here, we only explain the case for expressions for simplicity.} in a partially written program (\emph{the program context}), by typing a set of words (\emph{the keywords}) into the position where it should appear (\emph{the cursor position}).  The system then shows an ordered list of expressions (\emph{the recommendations}), one of which will be selected by the programmer and inserted into the cursor position. Below, we explain the mechanism in the four steps, namely reading keywords, extracting context information, expression generation, and ranking. 
+The keyword programming~\cite{little2009keyword} is an expression-level recommendation system based on keywords.  It is used when the programmer wants to write an expression (\emph{the desired expression})\footnote{The keyword programming system can recommend not only expressions but also one or multiple statements.  Here, we only explain the case for expressions for simplicity.} in a partially written program (\emph{the program context}), by typing a set of words (\emph{the keywords}) into the position where it should appear (\emph{the cursor position}).  The system then shows an ordered list of expressions (\emph{the recommendations}), one of which will be selected by the programmer and inserted into the cursor position. Below, we explain the mechanism in the four steps, namely reading keywords, extracting context information, expression generation, and ranking. 
 
 \begin{figure}[!ht]
 \centering
@@ -268,7 +268,10 @@ A neural network text generation can be accomplished in 4 steps. We demonstrate 
 \label{fig:NNTG}
 \end{figure}
 
-First, the system reads the data and create the dictionary of words. The data includes all Shakespeare's works. Moreover, because neural networks can only process with numeric values, it need a way to represent word by numbers, namely word embedding. There are many ways to map words, such as one-hot embedding and word2vec. 
+First, the system reads the data and create the dictionary of words. The data includes all Shakespeare's works. Moreover, because neural networks can only process with numeric values, it need a way to represent word by numbers, namely word embedding. 
+
+Word2vec is one way to implement word embedding. There are two benifits for using word2vec. In contrast to traditional embedding approach, word2vec can represent a word in a lower dimension. Thus, it requires less memory to store the data and it is faster to train the neural networks model with those data. Moreover, word2vec can detemine the similarity between two word vectors using the cosine distance. It usually used to find synonyms in the natural language processing.  
+
 
 Second, the system builds 2 lists that are used as the inputs of the neural networks. One list contains a word sequence, and the other one contains the next word. For example, the sentence \textit{"Over hill, over dale"} can create 3 pairs of data. The first sequence is \textit{over} and the next word is \textit{hill}. The second sequence is \textit{over hill} and the next word is \textit{over}. The last sequence is \textit{over hill over} and the corresponding next word is \textit{dale}. After obtaining the data, we need to map each word to a numeric value by using word embedding.
 
@@ -398,7 +401,7 @@ First, we prepare 15 expressions decided by ourselves.
 
 Then, for each expression, we search on the github and collect 21 programs containing the expression in the former step.
 
-After we get the programs, we add 20 of 21 programs for each to the training dataset of the LSTM model. In order to avoid overfitting, we also add 5000 Java programs from the dataset built to evaluate the implementation in the ~\cite{Dataset}, which are the top active Java GitHub projects on January 22nd 2015.
+After we get the programs, we add 20 of 21 programs for each to the training dataset of the LSTM model. In order to avoid overfitting, we also add 5000 Java programs from the dataset built to evaluate the implementation in the ~\cite{allamanis2015suggesting}, which are the top active Java GitHub projects on January 22nd 2015.
 
 Subsequently, we create a task for each by using the remaining one program. We erase the code of the expression in that program. and make it to be a program with a hole. And for each expression, we think a keyword query that can describe the expression. 
 
@@ -578,33 +581,34 @@ Although we use nearly 5000 program as our training data, it is still not enough
 \section{Conclusion}
 
 
+\bibliographystyle{unsrt}
+\bibliography{ref}
+
+% \begin{thebibliography}{10}
+% \bibitem{ProgramHistory} Robbes R, Lanza M. How program history can improve code completion[C]//2008 23rd IEEE/ACM International Conference on Automated Software Engineering. IEEE, 2008: 317-326.
+
+% \bibitem{Sangmok} Han S, Wallace D R, Miller R C. Code completion from abbreviated input[C]//2009 IEEE/ACM International Conference on Automated Software Engineering. IEEE, 2009: 332-343.
+
+% \bibitem{Sheng} Hu S, Xiao C, Qin J, et al. Autocompletion for Prefix-Abbreviated Input[C]//Proceedings of the 2019 International Conference on Management of Data. 2019: 211-228.
+
+% \bibitem{KeywordProgramming} Little G, Miller R C. Keyword programming in Java[J]. Automated Software Engineering, 2009, 16(1): 37.
+
+% \bibitem{TabNine} TabNine: https://tabnine.com/
+
+% \bibitem{Marcel} Bruch M, Monperrus M, Mezini M. Learning from examples to improve code completion systems[C]//Proceedings of the 7th joint meeting of the European software engineering conference and the ACM SIGSOFT symposium on the foundations of software engineering. 2009: 213-222.
+
+% \bibitem{NNTG} Lu S, Zhu Y, Zhang W, et al. Neural text generation: Past, present and beyond[J]. arXiv preprint arXiv:1803.07133, 2018.
+
+% \bibitem{Bengio} Bengio Y, Ducharme R, Vincent P, et al. A neural probabilistic language model[J]. Journal of machine learning research, 2003, 3(Feb): 1137-1155.
+
+% \bibitem{RNN} Mikolov T, Karafiát M, Burget L, et al. Recurrent neural network based language model[C]//Eleventh annual conference of the international speech communication association. 2010.
 
 
-\begin{thebibliography}{10}
-\bibitem{ProgramHistory} Robbes R, Lanza M. How program history can improve code completion[C]//2008 23rd IEEE/ACM International Conference on Automated Software Engineering. IEEE, 2008: 317-326.
+% \bibitem{LSTM} Hochreiter S, Schmidhuber J. Long short-term memory[J]. Neural computation, 1997, 9(8): 1735-1780.
 
-\bibitem{Sangmok} Han S, Wallace D R, Miller R C. Code completion from abbreviated input[C]//2009 IEEE/ACM International Conference on Automated Software Engineering. IEEE, 2009: 332-343.
+% \bibitem{Dataset} Allamanis M, Barr E T, Bird C, et al. Suggesting accurate method and class names[C]//Proceedings of the 2015 10th Joint Meeting on Foundations of Software Engineering. 2015: 38-49.
 
-\bibitem{Sheng} Hu S, Xiao C, Qin J, et al. Autocompletion for Prefix-Abbreviated Input[C]//Proceedings of the 2019 International Conference on Management of Data. 2019: 211-228.
-
-\bibitem{KeywordProgramming} Little G, Miller R C. Keyword programming in Java[J]. Automated Software Engineering, 2009, 16(1): 37.
-
-\bibitem{TabNine} TabNine: https://tabnine.com/
-
-\bibitem{Marcel} Bruch M, Monperrus M, Mezini M. Learning from examples to improve code completion systems[C]//Proceedings of the 7th joint meeting of the European software engineering conference and the ACM SIGSOFT symposium on the foundations of software engineering. 2009: 213-222.
-
-\bibitem{NNTG} Lu S, Zhu Y, Zhang W, et al. Neural text generation: Past, present and beyond[J]. arXiv preprint arXiv:1803.07133, 2018.
-
-\bibitem{Bengio} Bengio Y, Ducharme R, Vincent P, et al. A neural probabilistic language model[J]. Journal of machine learning research, 2003, 3(Feb): 1137-1155.
-
-\bibitem{RNN} Mikolov T, Karafiát M, Burget L, et al. Recurrent neural network based language model[C]//Eleventh annual conference of the international speech communication association. 2010.
-
-
-\bibitem{LSTM} Hochreiter S, Schmidhuber J. Long short-term memory[J]. Neural computation, 1997, 9(8): 1735-1780.
-
-\bibitem{Dataset} Allamanis M, Barr E T, Bird C, et al. Suggesting accurate method and class names[C]//Proceedings of the 2015 10th Joint Meeting on Foundations of Software Engineering. 2015: 38-49.
-
-\end{thebibliography}
+% \end{thebibliography}
 
 
 \end{document}
