@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.12.5)  12 FEB 2020 17:57
+This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.12.5)  12 FEB 2020 19:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -4325,21 +4325,7 @@ Overfull \hbox (15.83995pt too wide) in paragraph at lines 286--287
  [][] 
  []
 
-
-LaTeX Warning: Citation `word2vec' on page 3 undefined on input line 293.
-
-
-LaTeX Warning: Citation `ASTToken2Vec' on page 3 undefined on input line 294.
-
-
-LaTeX Warning: Citation `LSTM' on page 3 undefined on input line 301.
-
-[3]
-
-LaTeX Warning: Citation `KeywordProgramming' on page 4 undefined on input line 
-321.
-
-(/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
+[3] (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/02/27 1.8b listings language file
 )
 Underfull \hbox (badness 10000) in paragraph at lines 383--384
@@ -4421,26 +4407,21 @@ t/m/n/9.25 new
 
 File: Figure/Overview.pdf Graphic file (type pdf)
 <Figure/Overview.pdf>
-LaTeX Font Info:    Calculating math sizes for size <7.82584> on input line 465
+LaTeX Font Info:    Calculating math sizes for size <7.82584> on input line 500
 .
-
-Overfull \hbox (17.93909pt too wide) in paragraph at lines 465--500
- [][][][] 
- []
-
-
-Overfull \hbox (2.54337pt too wide) in paragraph at lines 545--546
+[5]
+Overfull \hbox (2.54337pt too wide) in paragraph at lines 546--547
  [][] 
  []
 
 
-Overfull \hbox (9.8201pt too wide) in paragraph at lines 588--589
+Overfull \hbox (9.8201pt too wide) in paragraph at lines 589--590
  [][] 
  []
 
 File: Figure/ACKN.pdf Graphic file (type pdf)
 <Figure/ACKN.pdf>
-[5] [6] (./main.bbl
+[6] (./main.bbl
 ! Undefined control sequence.
 l.5 \newblock
               Keyword programming in java.
@@ -4565,6 +4546,51 @@ and I'll forget about whatever was undefined.
 
 ! Undefined control sequence.
 l.41 \newblock
+               Distributed representations of words and phrases and their
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.43 \newblock
+               In {\em Advances in neural information processing systems}, p...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.48 \newblock
+               Asttoken2vec: An embedding method for neural code completion.
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.52 \newblock
+               Long short-term memory.
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.53 \newblock
+               {\em Neural computation}, 9(8):1735--1780, 1997.
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.57 \newblock
                Suggesting accurate method and class names.
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -4573,8 +4599,44 @@ spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
 ! Undefined control sequence.
-l.42 \newblock
+l.58 \newblock
                In {\em Proceedings of the 2015 10th Joint Meeting on Foundat...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.64 \newblock
+               Learning phrase representations using rnn encoder-decoder for
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.66 \newblock
+               {\em arXiv preprint arXiv:1406.1078}, 2014.
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.71 \newblock
+               Generative adversarial nets.
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.72 \newblock
+               In {\em Advances in neural information processing systems}, p...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -4587,17 +4649,14 @@ and I'll forget about whatever was undefined.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: There were undefined references.
-
  ) 
 Here is how much of TeX's memory you used:
- 3700 strings out of 493223
- 48354 string characters out of 6144415
- 359889 words of memory out of 5000000
- 7684 multiletter control sequences out of 15000+600000
+ 3707 strings out of 493223
+ 48479 string characters out of 6144415
+ 359868 words of memory out of 5000000
+ 7691 multiletter control sequences out of 15000+600000
  35743 words of font info for 143 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
  30i,15n,42p,1309b,1863s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on main.dvi (7 pages, 57300 bytes).
+Output written on main.dvi (7 pages, 58884 bytes).

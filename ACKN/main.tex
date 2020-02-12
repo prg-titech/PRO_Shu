@@ -62,7 +62,7 @@ there are many variations with respect to the lengths of the presented code frag
 Information used for making recommendations can roughly be classified into two kinds, namely \emph{explicit} intention and \emph{implicit} context.  
 % TODO: they are not exclusive, rather used in combination.
 
-Explicit intention is the information that the programmer provides to the system when he or she wants to obtain recommendation.  Examples are \emph{prefix letters}, \emph{an abbreviation}, and \emph{keywords}.  When the programmer wants to type \texttt{InputStreamReader}, he or she can type ``\texttt{Inp}'' or ``\texttt{ISR}'' to a prefix-based or abbreviation-based system, respectively, then the system will generate identifiers that start with \texttt{Inp} or that are concatenation of words starting from \texttt{I}, \texttt{S} and \texttt{R}.  These kind of recommendation systems can be found many programming editors, for example Eclipse IDE.
+Explicit intention is the information that the programmer provides to the system when he or she wants to obtain recommendation.  Examples are \emph{prefix letters}, \emph{an abbreviation}, and \emph{keywords}.  When the programmer wants to type \texttt{BufferedReader}, he or she can type ``\texttt{Buf}'' or ``\texttt{BR}'' to a prefix-based or abbreviation-based system, respectively, then the system will generate identifiers that start with \texttt{Buf} or that are concatenation of words starting from \texttt{B} and \texttt{R}.  These kind of recommendation systems can be found many programming editors, for example Eclipse IDE.
 
 \begin{figure}[!ht]
 \centering
@@ -72,7 +72,7 @@ Explicit intention is the information that the programmer provides to the system
 \end{figure}
 
 
-\emph{Keyword programming}, on which we are based on,  uses keywords\footnote{In keyword programmings, the term \emph{keyword} means a query word used for searching, like the one used for web search engines.  It should not be confused with keywords (or reserved words) in the syntax of programming languages.} as the explicit intention~\cite{little2009keyword}.  The key idea is, by letting the programmer provide a bit longer explicit intention, to enable the system can recommend longer expressions or statements.  For example, when the programmer wants to input
+\emph{Keyword programming}, on which we are based on,  uses keywords\footnote{In keyword programmings, the term \emph{keyword} means a query word used for searching, like the one used for web search engines.  It should not be confused with keywords (or reserved words) in the syntax of programming languages.} as the explicit intention~\cite{little2009keyword}.  The key idea is, by letting the programmer provide a bit longer explicit intention, to enable the system to recommend longer expressions or statements.  For example, when the programmer wants to input
 \begin{quote}
   \texttt{new BufferedReader(\\
     \qquad{}new InputStreamReader(System.in))},   
@@ -290,15 +290,15 @@ Neural network text generation is a technique, which is originally developed in 
 
 \figref{fig:NNTG} illustrates the three main operations in neural network text generation, namely \emph{word embedding,} \emph{training}, and \emph{predicting}.
 
-\emph{Word embedding} operation converts between a word in the text and a numerical vector that is used as input and output of the generator network.  Among many embedding techniques, we use an embedding method called \emph{Word2Vec}~\cite{word2vec}, which can naturally embed semantic similarity into the vector representation.  Note that Word2Vec is based on neural network technology, we need to train another network by using a corpus.
-Though there are also more sophisticated and domain specific embedding methods (for example embedding nodes in a tree structure~\cite{ASTToken2Vec}), we do not consider in this paper.  
+\emph{Word embedding} operation converts between a word in the text and a numerical vector that is used as input and output of the generator network.  Among many embedding techniques, we use an embedding method called \emph{Word2Vec}~\cite{mikolov2013distributed}, which can naturally embed semantic similarity into the vector representation.  Note that Word2Vec is based on neural network technology, we need to train another network by using a corpus.
+Though there are also more sophisticated and domain specific embedding methods (for example embedding nodes in a tree structure~\cite{hidehikoasttoken2vec}), we do not consider in this paper.  
 
 \emph{Training} a neural network is to adjust parameters in the network by providing training data set from the corpus.  A training data for text generation is a sequence of words appear in the corpus as an input, and a word that appear just after the sequence as an expected output.  For example, when there is a phrase ``Over hill, over dale'' in the corpus, there will be three training data, namely
 $\langle[\mbox{``\texttt{over}''}], \mbox{``\texttt{hill}''}\rangle$, 
 $\langle[\mbox{``\texttt{over}''}, \mbox{``\texttt{hill}''}], \mbox{``\texttt{over}''}\rangle$,  and
 $\langle[\mbox{``\texttt{over}''}, \mbox{``\texttt{hill}''},\mbox{``\texttt{over}''}], \mbox{``\texttt{dale}''}\rangle$.
 
-In our work, we use the LSTM (long short-term memory) network~\cite{LSTM} for text generation.  LSTM is one of the recurrent neural network (RNN) models.  RNN is one of the network models for handling inputs in a form of a sequence by retaining a state inside of the network.  LSTM is developed for handling sequences that have structures (such as natural language grammars and phrase structures) by separately maintaining the states affected by immediately preceding words and by distantly preceding words.
+In our work, we use the LSTM (long short-term memory) network~\cite{hochreiter1997long} for text generation.  LSTM is one of the recurrent neural network (RNN) models.  RNN is one of the network models for handling inputs in a form of a sequence by retaining a state inside of the network.  LSTM is developed for handling sequences that have structures (such as natural language grammars and phrase structures) by separately maintaining the states affected by immediately preceding words and by distantly preceding words.
 
 % Second, the system builds 2 lists that are used as the inputs of the neural networks. One list contains a word sequence, and the other one contains the next word. For example, the sentence \textit{"Over hill, over dale"} can create 3 pairs of data. The first sequence is \textit{over} and the next word is \textit{hill}. The second sequence is \textit{over hill} and the next word is \textit{over}. The last sequence is \textit{over hill over} and the corresponding next word is \textit{dale}. After obtaining the data, we need to map each word to a numeric value by using word embedding.
 
@@ -318,7 +318,7 @@ The network can also be used for predicting a sequence of words followed by the 
 The original keyword programming does not always work well.  We here point out two problematic cases, namely preference of shorter expressions and ignorance of context, and discuss the causes of the problems.
 
 \subsection{Preference of shorter expressions}
-Though it is difficult to evaluate the effectiveness of this kind of recommendation systems, the original paper~\cite{KeywordProgramming} reported that the accuracy drops when the desired expressions get larger, even with an experiment with artificially prepared keywords.  We also confirmed that the quality of recommendation degrades when we tried to input a larger expressions with our re-implementation of the original keyword programming system.
+Though it is difficult to evaluate the effectiveness of this kind of recommendation systems, the original paper~\cite{little2009keyword} reported that the accuracy drops when the desired expressions get larger, even with an experiment with artificially prepared keywords.  We also confirmed that the quality of recommendation degrades when we tried to input a larger expressions with our re-implementation of the original keyword programming system.
 
 % Although keyword programming can help a user to complete the program conveniently, there is still a problem that the expected expression, especially a complicated one, is not able to be shown as the first candidate.
 
@@ -417,7 +417,7 @@ public class Read{
 
 \begin{figure*}[!ht]
 \centering
-\includegraphics[scale=0.42]{Figure/Overview.pdf}
+\includegraphics[scale=0.3]{Figure/Overview.pdf}
 \caption{Overview of ACKN mechanism}
 \label{fig:overview}
 \end{figure*}
@@ -462,6 +462,7 @@ Table~\ref{Table1} shows the expected expression and corresponding keyword. The 
 \begin{table}[!ht]
 \centering
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\scalebox{0.9}{
 \begin{tabular}{|l|l|l|}
 \hline
 No.& Keyword Query& Expected Expression\\
@@ -496,7 +497,7 @@ No.& Keyword Query& Expected Expression\\
 \hline
 15 & \textbf{load resource name}& \tabincell{l}{\textit{Thread.currentThread()}\\\textit{    .getContextClassLoader()}\\\textit{    .getResource(name)}}\\
 \hline
-\end{tabular}
+\end{tabular}}
 \caption{keywords and expected expressions of 15 tasks}
 \label{Table1}
 \end{table}
@@ -614,18 +615,11 @@ However, the word \texttt{display} and \texttt{print} can not be counted as simi
 
 In ACKN, we have to calculate the probability for each generation. Thus, it always costs few minutes to get the result and show it on the monitor, which are not acceptable for a code recommendation system. 
 
-% TODO
-
 \subsection{Using different neural networks}
-Except LSTM, there are also many neural networks that can be used in text generation. For example, the gated recurrent unit(GRU), generative pre-training(GPT), or generative adversarial nets(GANs). In addition, the LSTM model can be improved by using a attention mechanism. 
+Except LSTM, there are also many neural networks that can be used in text generation. For example, generative pre-training 2(GPT-2)~\cite{radford2019language}, gated recurrent unit(GRU)~\cite{cho2014learning}, or generative adversarial nets(GANs)~\cite{goodfellow2014generative}. In addition, the LSTM model can be improved by using a attention mechanism. 
 
 \subsection{Adding more training data}
 Although we use nearly 5000 program as our training data, it is still not enough for a deep learning issue. Therefore, it is neccessary to add more training data to avoid overfitting.
-
-% \section{Related Work}
-% Learning from Example : 
-
-% NLP2Code : 
 
 \section{Conclusion}
 
@@ -635,31 +629,6 @@ In this paper, we propose a code recommendation system based on context-aware ke
 \bibliographystyle{unsrt}
 \bibliography{ref}
 
-% \begin{thebibliography}{10}
-% \bibitem{ProgramHistory} Robbes R, Lanza M. How program history can improve code completion[C]//2008 23rd IEEE/ACM International Conference on Automated Software Engineering. IEEE, 2008: 317-326.
-
-% \bibitem{Sangmok} Han S, Wallace D R, Miller R C. Code completion from abbreviated input[C]//2009 IEEE/ACM International Conference on Automated Software Engineering. IEEE, 2009: 332-343.
-
-% \bibitem{Sheng} Hu S, Xiao C, Qin J, et al. Autocompletion for Prefix-Abbreviated Input[C]//Proceedings of the 2019 International Conference on Management of Data. 2019: 211-228.
-
-% \bibitem{KeywordProgramming} Little G, Miller R C. Keyword programming in Java[J]. Automated Software Engineering, 2009, 16(1): 37.
-
-% \bibitem{TabNine} TabNine: https://tabnine.com/
-
-% \bibitem{Marcel} Bruch M, Monperrus M, Mezini M. Learning from examples to improve code completion systems[C]//Proceedings of the 7th joint meeting of the European software engineering conference and the ACM SIGSOFT symposium on the foundations of software engineering. 2009: 213-222.
-
-% \bibitem{NNTG} Lu S, Zhu Y, Zhang W, et al. Neural text generation: Past, present and beyond[J]. arXiv preprint arXiv:1803.07133, 2018.
-
-% \bibitem{Bengio} Bengio Y, Ducharme R, Vincent P, et al. A neural probabilistic language model[J]. Journal of machine learning research, 2003, 3(Feb): 1137-1155.
-
-% \bibitem{RNN} Mikolov T, Karafiát M, Burget L, et al. Recurrent neural network based language model[C]//Eleventh annual conference of the international speech communication association. 2010.
-
-
-% \bibitem{LSTM} Hochreiter S, Schmidhuber J. Long short-term memory[J]. Neural computation, 1997, 9(8): 1735-1780.
-
-% \bibitem{Dataset} Allamanis M, Barr E T, Bird C, et al. Suggesting accurate method and class names[C]//Proceedings of the 2015 10th Joint Meeting on Foundations of Software Engineering. 2015: 38-49.
-
-% \end{thebibliography}
 
 
 \end{document}
